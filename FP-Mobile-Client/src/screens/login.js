@@ -8,25 +8,41 @@ import {
   Button,
   Image,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
+import { useNavigation } from "@react-navigation/native";
 export default function Login() {
+  const { navigate } = useNavigation();
+  const onClickRegister = () => {
+    navigate("Register");
+  };
   return (
     <>
-      <View style={{ height: "100%", justifyContent: "center" }}>
+      <View
+        style={{
+          height: "100%",
+          justifyContent: "center",
+          backgroundColor: "white",
+        }}
+      >
         {/* Title */}
         <View>
-          <Text
-            style={{
-              color: "#0C6EB1",
-              fontWeight: "bold",
-              fontSize: 40,
-              textAlign: "center",
-            }}
-          >
-            HealthRevamp
-          </Text>
+          <View>
+            <View
+              style={{
+                paddingLeft: 50,
+                paddingRight: 50,
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <Image
+                source={require("../../assets/logo.png")}
+                style={{ width: "100%", resizeMode: "contain" }}
+              />
+            </View>
+          </View>
           <Text
             style={{
               color: "#0C6EB1",
@@ -52,6 +68,13 @@ export default function Login() {
               <Text style={styles.text}>Login</Text>
             </LinearGradient>
           </View>
+          <TouchableOpacity onPress={onClickRegister}>
+            <Text
+              style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}
+            >
+              Don’t have an account? sign up here
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={{ bottom: 0, position: "relative", paddingLeft: 10 }}>
           <Image
@@ -77,7 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: "#EEEEEE",
     borderColor: "#EEEEEE",
-    shadowColor: "#9B9B9B"
+    shadowColor: "#9B9B9B",
   },
   button: {
     alignItems: "center",

@@ -1,28 +1,28 @@
-import { StatusBar } from "expo-status-bar";
-import { PaperProvider } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
-import Login from "./src/screens/login";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import Run from "./src/screens/run";
+import MainStack from "./src/navigators/stackNav";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 export default function App() {
+  const Stack = createNativeStackNavigator();
   return (
-    <PaperProvider>
-      <SafeAreaProvider style={styles.container}>
-        <SafeAreaView>
-          <ScrollView>
-            <Login />
-            
-          </ScrollView>
-          {/* <Run /> */}
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </PaperProvider>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#1E87CE",
+          },
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            color: "#fff",
+            fontWeight: "bold",
+          },
+        }}
+      >
+        <Stack.Screen name="Login" component={MainStack} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-});
+const styles = StyleSheet.create({});
