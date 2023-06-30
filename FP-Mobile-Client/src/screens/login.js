@@ -17,6 +17,9 @@ export default function Login() {
   const onClickRegister = () => {
     navigate("Register");
   };
+  const onClickLogin = () => {
+    navigate("Dashboard");
+  };
   return (
     <>
       <View
@@ -64,10 +67,18 @@ export default function Login() {
               start={[0, 0]}
               end={[1, 0]}
               style={styles.button}
+              onPress={onClickLogin}
             >
               <Text style={styles.text}>Login</Text>
             </LinearGradient>
           </View>
+          <TouchableOpacity onPress={onClickLogin}>
+            <Text
+              style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}
+            >
+              Login
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={onClickRegister}>
             <Text
               style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}
