@@ -47,6 +47,7 @@ export default function Register() {
                 fontWeight: "400",
                 fontSize: 32,
                 textAlign: "center",
+                fontWeight: "bold",
               }}
             >
               Register
