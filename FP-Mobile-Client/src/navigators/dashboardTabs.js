@@ -11,8 +11,9 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 const Tab = createBottomTabNavigator();
 import DashboardPage from "../screens/dashboard";
-import FoodNList from "../screens/foodNutrition";
-import Challenge from "../screens/challange";
+import FoodNListPage from "../screens/foodNutrition";
+import ChallengePage from "../screens/challange";
+import PaymentStack from "../navigators/paymentStack";
 export default function DashboardTabs() {
   return (
     <Tab.Navigator
@@ -25,11 +26,17 @@ export default function DashboardTabs() {
           color: "#fff",
           fontWeight: "bold",
         },
+        tabBarStyle: {
+          backgroundColor: "#1E87CE",
+        },
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor: '#fff'
       }}
     >
       <Tab.Screen name="Home" component={DashboardPage} />
-      <Tab.Screen name="Food Nutrition" component={FoodNList} />
-      <Tab.Screen name="Challenge" component={Challenge} />
+      <Tab.Screen name="Food Nutrition" component={FoodNListPage} />
+      <Tab.Screen name="Challenge" component={ChallengePage} />
+      <Tab.Screen name="Payment" component={PaymentStack} />
     </Tab.Navigator>
   );
 }

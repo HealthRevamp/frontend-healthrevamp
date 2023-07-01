@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { PaperProvider } from "react-native-paper";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  Button,
   Image,
-  Pressable,
   TouchableOpacity,
   Alert,
   ActivityIndicator,
@@ -15,57 +12,31 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector, useDispatch } from "react-redux";
+import { doLogin } from "../actions/action";
+import { selectData, selectLoading, selectError } from "../slice/selector";
 export default function Login() {
   const { navigate } = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const loading = useSelector(selectLoading);
+  const dispatch = useDispatch();
 
   const onClickRegister = () => {
     navigate("RegisterPage");
   };
 
-  const storeData = async (key, value) => {
-    try {
-      await AsyncStorage.setItem(key, value);
-      console.log("Data stored successfully!");
-    } catch (error) {
-      console.error("Error storing data:", error);
-    }
-  };
-
-  const onClickLogin = async () => {
-    try {
-      setLoading(true);
-
-      const response = await fetch(
-        "https://9bc4-103-138-68-174.ap.ngrok.io/users/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      setLoading(false);
-
-      if (response.ok) {
-        setEmail("");
-        setPassword("");
-        const responseData = await response.json();
-        const responseAccess_token = responseData.access_token;
-        storeData("access_token", responseAccess_token);
-        navigate("Dashboard");
-      } else {
-        Alert.alert("Error", "Login failed!");
-      }
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
-      Alert.alert("Error", "An error occurred!");
-    }
+  const onClickLogin = () => {
+    const move = () => {
+      navigate("Dashboard");
+    };
+    const AlertSuccess = () => {
+      Alert.alert("Success", "Login successful!");
+    };
+    const AlertFailed = () => {
+      Alert.alert("Login failed!", "Check your input");
+    };
+    dispatch(doLogin(email, password, move, AlertSuccess, AlertFailed));
   };
   return (
     <>
@@ -147,19 +118,23 @@ export default function Login() {
             secureTextEntry
             style={styles.input}
           />
-          <View style={{ padding: 20.0 }}>
-            <LinearGradient
-              colors={["#0C6EB1", "#22C49D"]}
-              start={[0, 0]}
-              end={[1, 0]}
-              style={styles.button}
-              onPress={onClickLogin}
-            >
-              <TouchableOpacity onPress={onClickLogin}>
+          <TouchableOpacity
+            onPress={onClickLogin}
+            underlayColor="transparent"
+            activeOpacity={1}
+          >
+            <View style={{ padding: 20.0 }}>
+              <LinearGradient
+                colors={["#0C6EB1", "#22C49D"]}
+                start={[0, 0]}
+                end={[1, 0]}
+                style={styles.button}
+                onPress={onClickLogin}
+              >
                 <Text style={styles.text}>Login</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-          </View>
+              </LinearGradient>
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity onPress={onClickRegister}>
             <Text
               style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}
