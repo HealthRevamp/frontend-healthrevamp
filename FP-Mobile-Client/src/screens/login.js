@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { PaperProvider } from "react-native-paper";
 import {
   StyleSheet,
@@ -9,19 +9,93 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Login() {
   const { navigate } = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const onClickRegister = () => {
     navigate("RegisterPage");
   };
-  const onClickLogin = () => {
-    navigate("Dashboard");
+
+  const storeData = async (key, value) => {
+    try {
+      await AsyncStorage.setItem(key, value);
+      console.log("Data stored successfully!");
+    } catch (error) {
+      console.error("Error storing data:", error);
+    }
+  };
+
+  const onClickLogin = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "https://9bc4-103-138-68-174.ap.ngrok.io/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      setLoading(false);
+
+      if (response.ok) {
+        setEmail("");
+        setPassword("");
+        const responseData = await response.json();
+        const responseAccess_token = responseData.access_token;
+        storeData("access_token", responseAccess_token);
+        navigate("Dashboard");
+      } else {
+        Alert.alert("Error", "Login failed!");
+      }
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      Alert.alert("Error", "An error occurred!");
+    }
   };
   return (
     <>
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" />
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
+            }}
+          >
+            Patience is part of health
+          </Text>
+        </View>
+      )}
       <View
         style={{
           height: "100%",
@@ -59,8 +133,20 @@ export default function Login() {
         </View>
         {/* Form */}
         <View style={styles.containerForm}>
-          <TextInput placeholder="type your username" style={styles.input} />
-          <TextInput placeholder="type your password" style={styles.input} />
+          <TextInput
+            placeholder="type your email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="type your password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.input}
+          />
           <View style={{ padding: 20.0 }}>
             <LinearGradient
               colors={["#0C6EB1", "#22C49D"]}

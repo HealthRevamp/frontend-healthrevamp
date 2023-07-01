@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, AsyncStorage, useEffect } from "react";
 import { PaperProvider } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
@@ -16,16 +16,19 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 const subjects = [
-  { id: 1, name: "Card 1" },
-  { id: 2, name: "Card 2" },
-  { id: 3, name: "Card 3" },
-  { id: 4, name: "Card 4" },
+  { id: 1, image: require("../../assets/run-icon.png") },
+  { id: 2, image: require("../../assets/habits-icon.png") },
+  { id: 3, image: require("../../assets/challange-icon.png") },
+  { id: 4, image: require("../../assets/nutrition-information-icon.png") },
 ];
 
 const cardGap = 16;
 
 const cardWidth = (Dimensions.get("window").width - cardGap * 3) / 2;
 export default function DashboardPage() {
+  useEffect(() => {
+    return async () => {};
+  }, []);
   return (
     <>
       <ScrollView>
@@ -46,7 +49,7 @@ export default function DashboardPage() {
 
           {/* give rank */}
           <View style={styles.containerGiveRank}>
-            <Text style={styles.textGiveRank}>Give Rank</Text>
+            <Text style={styles.textGiveRank}>Check your rank</Text>
             <Ionicons
               name="star-outline"
               style={{
@@ -121,7 +124,11 @@ export default function DashboardPage() {
                     ]}
                   >
                     <TouchableOpacity style={styles.card}>
-                      <Text>{subject.name}</Text>
+                      <Image
+                        key={i}
+                        source={subject.image}
+                        style={{ width: 60, height: 60 }}
+                      />
                     </TouchableOpacity>
                   </View>
                 );

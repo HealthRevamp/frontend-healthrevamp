@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { PaperProvider } from "react-native-paper";
 import {
   StyleSheet,
@@ -9,12 +9,84 @@ import {
   Image,
   Pressable,
   ScrollView,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
+import { useNavigation } from "@react-navigation/native";
 export default function Register() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [height, setHeight] = useState("");
+  const [width, setWidth] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { navigate } = useNavigation();
+  const handleRegister = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "https://9bc4-103-138-68-174.ap.ngrok.io/users/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, email, password, height, width }),
+        }
+      );
+
+      setLoading(false);
+      if (response.ok) {
+        Alert.alert("Success", "Registration successful!");
+        // Reset form fields
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        setHeight("");
+        setWidth("");
+        navigate("LoginPage");
+      } else {
+        Alert.alert("Error", "Registration failed!");
+      }
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      Alert.alert("Error", "An error occurred!");
+    }
+  };
+
   return (
     <>
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" />
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
+            }}
+          >
+            Patience is part of health
+          </Text>
+        </View>
+      )}
       <ScrollView>
         <View
           style={{
@@ -55,11 +127,38 @@ export default function Register() {
           </View>
           {/* Form */}
           <View style={styles.containerForm}>
-            <TextInput placeholder="type your username" style={styles.input} />
-            <TextInput placeholder="type your email" style={styles.input} />
-            <TextInput placeholder="type your password" style={styles.input} />
-            <TextInput placeholder="type your height" style={styles.input} />
-            <TextInput placeholder="type your width" style={styles.input} />
+            <TextInput
+              placeholder="type your username"
+              value={username}
+              onChangeText={setUsername}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="type your email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="type your password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="type your height"
+              value={height}
+              onChangeText={setHeight}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="type your width"
+              value={width}
+              onChangeText={setWidth}
+              style={styles.input}
+            />
             <View style={{ padding: 20.0 }}>
               <LinearGradient
                 colors={["#0C6EB1", "#22C49D"]}
@@ -67,7 +166,9 @@ export default function Register() {
                 end={[1, 0]}
                 style={styles.button}
               >
-                <Text style={styles.text}>Register</Text>
+                <TouchableOpacity onPress={handleRegister}>
+                  <Text style={styles.text}>Register</Text>
+                </TouchableOpacity>
               </LinearGradient>
             </View>
           </View>

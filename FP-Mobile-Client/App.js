@@ -21,7 +21,13 @@ export default function App() {
         }}
       >
         <Stack.Screen name="Login" component={MainStack} />
-        <Stack.Screen name="Dashboard" component={DashboardTabs} />
+        <Stack.Screen
+          name="Dashboard"
+          component={DashboardTabs}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
