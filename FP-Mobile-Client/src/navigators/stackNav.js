@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../screens/login";
-import Register from "../screens/register";
+import LoginPage from "../screens/login";
+import RegisterPage from "../screens/register";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,16 +20,16 @@ export default function MainStack() {
       }}
     >
       <Stack.Screen
-        name="Login"
-        component={Login}
+        name="LoginPage"
+        component={LoginPage}
         options={{
           title: "Login",
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="Register"
-        component={Register}
+        name="RegisterPage"
+        component={RegisterPage}
       />
     </Stack.Navigator>
   );

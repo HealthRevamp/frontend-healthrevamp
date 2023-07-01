@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function Login() {
   const { navigate } = useNavigation();
   const onClickRegister = () => {
-    navigate("Register");
+    navigate("RegisterPage");
   };
   const onClickLogin = () => {
     navigate("Dashboard");
@@ -69,16 +69,11 @@ export default function Login() {
               style={styles.button}
               onPress={onClickLogin}
             >
-              <Text style={styles.text}>Login</Text>
+              <TouchableOpacity onPress={onClickLogin}>
+                <Text style={styles.text}>Login</Text>
+              </TouchableOpacity>
             </LinearGradient>
           </View>
-          <TouchableOpacity onPress={onClickLogin}>
-            <Text
-              style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}
-            >
-              Login
-            </Text>
-          </TouchableOpacity>
           <TouchableOpacity onPress={onClickRegister}>
             <Text
               style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}
