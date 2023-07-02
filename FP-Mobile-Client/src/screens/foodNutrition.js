@@ -16,10 +16,19 @@ export default function DashboardPage() {
   return (
     <>
       <ScrollView>
-        <Text style={{ fontSize: 24, fontWeight: "bold", margin: 30 }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            paddingTop: 20,
+            paddingBottom: 20,
+            paddingLeft: 16,
+            paddingRight: 16,
+          }}
+        >
           Find your nutrition
         </Text>
-        <View style={{ paddingLeft: 30, paddingRight: 30 }}>
+        <View style={{ paddingLeft: 20, paddingRight: 20 }}>
           <View style={styles.card}>
             <View style={styles.image}>
               <Image
@@ -86,7 +95,7 @@ export default function DashboardPage() {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
-    borderRadius: 8,
+    borderRadius: 10,
     elevation: 4,
     shadowColor: "#000",
     shadowOffset: {
