@@ -16,16 +16,17 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 const subjects = [
-  { id: 1, image: require("../../assets/run-icon.png") },
-  { id: 2, image: require("../../assets/habits-icon.png") },
-  { id: 3, image: require("../../assets/challange-icon.png") },
-  { id: 4, image: require("../../assets/nutrition-information-icon.png") },
+  { id: 1, image: require("../../assets/run-icon.png"), navigate: 'Run'},
+  { id: 2, image: require("../../assets/habits-icon.png"), navigate: ''},
+  { id: 3, image: require("../../assets/challange-icon.png"), navigate: 'Challenge'},
+  { id: 4, image: require("../../assets/nutrition-information-icon.png"), navigate: 'Food Nutrition' },
 ];
 
 const cardGap = 16;
 
 const cardWidth = (Dimensions.get("window").width - cardGap * 3) / 2;
 export default function DashboardPage() {
+  const { navigate } = useNavigation();
   useEffect(() => {
     return async () => {};
   }, []);
@@ -124,7 +125,7 @@ export default function DashboardPage() {
                       },
                     ]}
                   >
-                    <TouchableOpacity style={styles.card}>
+                    <TouchableOpacity style={styles.card} onPress={() => navigate(subject.navigate)}>
                       <Image
                         key={i}
                         source={subject.image}

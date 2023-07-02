@@ -79,32 +79,17 @@ export default function Register() {
           </Text>
         </View>
       )}
-      <ScrollView>
+      <ScrollView style={{height: '100%', flex: 1, backgroundColor: '#fff'}}>
         <View
           style={{
             height: "100%",
             justifyContent: "center",
             backgroundColor: "#fff",
-            paddingTop: 40,
+            paddingTop: 40
           }}
         >
           {/* Title */}
           <View>
-            <View>
-              <View
-                style={{
-                  paddingLeft: 50,
-                  paddingRight: 50,
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                <Image
-                  source={require("../../assets/Logo.png")}
-                  style={{ width: "100%", height: 80, resizeMode: "contain" }}
-                />
-              </View>
-            </View>
             <Text
               style={{
                 color: "#0C6EB1",
@@ -114,7 +99,7 @@ export default function Register() {
                 fontWeight: "bold",
               }}
             >
-              Register
+              Update Profile
             </Text>
           </View>
           {/* Form */}
@@ -163,16 +148,10 @@ export default function Register() {
                   end={[1, 0]}
                   style={styles.button}
                 >
-                  <Text style={styles.text}>Register</Text>
+                  <Text style={styles.text}>Update</Text>
                 </LinearGradient>
               </View>
             </TouchableOpacity>
-          </View>
-          <View style={{ bottom: 0, position: "relative", paddingLeft: 10 }}>
-            <Image
-              source={require("../../assets/login-regis.png")}
-              style={{ width: 210, height: 200 }}
-            />
           </View>
         </View>
       </ScrollView>
