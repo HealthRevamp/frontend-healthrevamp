@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -103,46 +105,48 @@ export default function Login() {
           </Text>
         </View>
         {/* Form */}
-        <View style={styles.containerForm}>
-          <TextInput
-            placeholder="type your email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="type your password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.input}
-          />
-          <TouchableOpacity
-            onPress={onClickLogin}
-            underlayColor="transparent"
-            activeOpacity={1}
-          >
-            <View style={{ padding: 20.0 }}>
-              <LinearGradient
-                colors={["#0C6EB1", "#22C49D"]}
-                start={[0, 0]}
-                end={[1, 0]}
-                style={styles.button}
-                onPress={onClickLogin}
-              >
-                <Text style={styles.text}>Login</Text>
-              </LinearGradient>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onClickRegister}>
-            <Text
-              style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <View style={styles.containerForm}>
+            <TextInput
+              placeholder="type your email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="type your password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              style={styles.input}
+            />
+            <TouchableOpacity
+              onPress={onClickLogin}
+              underlayColor="transparent"
+              activeOpacity={1}
             >
-              Don’t have an account? sign up here
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <View style={{ padding: 20.0 }}>
+                <LinearGradient
+                  colors={["#0C6EB1", "#22C49D"]}
+                  start={[0, 0]}
+                  end={[1, 0]}
+                  style={styles.button}
+                  onPress={onClickLogin}
+                >
+                  <Text style={styles.text}>Login</Text>
+                </LinearGradient>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onClickRegister}>
+              <Text
+                style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}
+              >
+                Don’t have an account? sign up here
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
         <View style={{ bottom: 0, position: "relative", paddingLeft: 10 }}>
           <Image
             source={require("../../assets/login-regis.png")}

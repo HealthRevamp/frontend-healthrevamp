@@ -3,21 +3,18 @@ import {
   fetchDataSuccess,
   fetchDataFailure,
 } from "../slice/slice";
-
+import { BASE_URL } from "../config/base-API";
 export const doLogin = (email, password, move, AlertSuccess, AlertFailed) => {
   return async (dispatch) => {
     try {
       dispatch(fetchDataStart());
-      const response = await fetch(
-        "https://4f8e-103-138-68-174.ap.ngrok.io/users/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
       dispatch(fetchDataSuccess());
 
       if (response.ok) {
@@ -46,16 +43,13 @@ export const doRegister = (
   return async (dispatch) => {
     try {
       dispatch(fetchDataStart());
-      const response = await fetch(
-        "https://4f8e-103-138-68-174.ap.ngrok.io/users/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, email, password, height, width }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password, height, width }),
+      });
       dispatch(fetchDataSuccess());
 
       if (response.ok) {

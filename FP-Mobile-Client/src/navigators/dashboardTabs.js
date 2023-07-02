@@ -14,6 +14,7 @@ import DashboardPage from "../screens/dashboard";
 import FoodNListPage from "../screens/foodNutrition";
 import ChallengePage from "../screens/challange";
 import PaymentStack from "../navigators/paymentStack";
+import RunPage from "../screens/run";
 export default function DashboardTabs() {
   return (
     <Tab.Navigator
@@ -37,6 +38,7 @@ export default function DashboardTabs() {
       <Tab.Screen name="Food Nutrition" component={FoodNListPage} />
       <Tab.Screen name="Challenge" component={ChallengePage} />
       <Tab.Screen name="Payment" component={PaymentStack} />
+      <Tab.Screen name="Run" component={RunPage} />
     </Tab.Navigator>
   );
 }

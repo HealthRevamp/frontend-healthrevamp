@@ -66,8 +66,8 @@ export default function DashboardPage() {
               <Text
                 style={{
                   fontSize: 24,
-                  paddingLeft: 30,
-                  paddingTop: 30,
+                  paddingLeft: 20,
+                  paddingTop: 10,
                   fontWeight: "bold",
                 }}
               >
@@ -101,9 +101,10 @@ export default function DashboardPage() {
             <Text
               style={{
                 fontSize: 24,
-                padding: 10,
-                marginLeft: 20,
-                marginRight: 20,
+                paddingTop: 10,
+                paddingBottom: 10,
+                paddingLeft: 16,
+                paddingRight: 16,
                 fontWeight: "bold",
               }}
             >
@@ -154,8 +155,7 @@ const styles = StyleSheet.create({
     height: 90,
     width: 100,
     backgroundColor: "white",
-    borderRadius: 16,
-    shadowOpacity: 0.2,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
     elevation: 4,
@@ -176,7 +176,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
-    margin: 30,
+    marginLeft: 30,
+    marginRight: 30,
+    margin: 20,
     flex: 1,
   },
   textProfile: {
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     margin: 10,
     marginLeft: 20,
     marginRight: 20,
-    borderRadius: 100,
+    borderRadius: 30,
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 30,
@@ -223,7 +225,7 @@ const styles = StyleSheet.create({
     margin: 10,
     marginLeft: 20,
     marginRight: 20,
-    borderRadius: 20,
+    borderRadius: 10,
     elevation: 4,
     shadowColor: "#000",
     shadowOffset: {

@@ -1,22 +1,14 @@
 import React, { useState } from "react";
-import { Image, Text, View, TouchableOpacity, ScrollView } from "react-native";
+import {
+  Image,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 
 export default function ChallengeScreen() {
-  const [activeCard, setActiveCard] = useState(null);
-
-  const navigateToScreen = (id) => {
-    // Handle navigation based on ID
-    console.log("Navigating to screen with ID:", id);
-  };
-
-  const handleCardPressIn = (id) => {
-    setActiveCard(id);
-  };
-
-  const handleCardPressOut = () => {
-    setActiveCard(null);
-  };
-
   return (
     <>
       <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -27,193 +19,55 @@ export default function ChallengeScreen() {
               paddingLeft: 50,
               paddingRight: 50,
               display: "flex",
-              flexDirection: "row",
+              flexDirection: "row"
             }}
           >
             <Image
-              style={{ width: "100%", resizeMode: "contain" }}
+              style={{ width: "100%", height: 250, resizeMode: "contain" }}
               source={require("../../assets/challange-page.png")}
             />
           </View>
-          <View>
-            <Text style={{ fontSize: 24, fontWeight: "bold" }}>
-              Challenge List
-            </Text>
-            {/* Card Layout */}
-            <View>
-              <TouchableOpacity
-                style={{
-                  borderRadius: 35,
-                  padding: 10,
-                  margin: 10,
-                  minWidth: 125,
-                  backgroundColor: activeCard === 1 ? "#eee" : "#fff",
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                }}
-                activeOpacity={0.8}
-                onPress={() => navigateToScreen(1)}
-                onPressIn={() => handleCardPressIn(1)}
-                onPressOut={handleCardPressOut}
-              >
-                {/* Card content */}
-                <Text
-                  style={{
-                    fontSize: 50,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  1
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    marginTop: 8,
-                    bottom: 8,
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Feature
-                </Text>
+          {/* Card */}
+          <Text
+            style={{
+              paddingHorizontal: 20,
+              fontSize: 24,
+              fontWeight: "bold",
+              marginBottom: 20,
+            }}
+          >
+            Challenge
+          </Text>
+          <View style={styles.container}>
+            <View style={styles.cardContainer}>
+              <TouchableOpacity style={styles.card}>
+                <Text>Card 1</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  borderRadius: 35,
-                  padding: 10,
-                  margin: 10,
-                  minWidth: 125,
-                  backgroundColor: activeCard === 2 ? "#eee" : "#fff",
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                }}
-                activeOpacity={0.8}
-                onPress={() => navigateToScreen(2)}
-                onPressIn={() => handleCardPressIn(2)}
-                onPressOut={handleCardPressOut}
-              >
-                {/* Card content */}
-                <Text
-                  style={{
-                    fontSize: 50,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  2
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    marginTop: 8,
-                    bottom: 8,
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Feature
-                </Text>
+            </View>
+            <View style={styles.cardContainer}>
+              <TouchableOpacity style={styles.card}>
+                <Text>Card 1</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  borderRadius: 35,
-                  padding: 10,
-                  margin: 10,
-                  minWidth: 125,
-                  backgroundColor: activeCard === 3 ? "#eee" : "#fff",
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                }}
-                activeOpacity={0.8}
-                onPress={() => navigateToScreen(3)}
-                onPressIn={() => handleCardPressIn(3)}
-                onPressOut={handleCardPressOut}
-              >
-                {/* Card content */}
-                <Text
-                  style={{
-                    fontSize: 50,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  3
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    marginTop: 8,
-                    bottom: 8,
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Feature
-                </Text>
+            </View>
+            <View style={styles.cardContainer}>
+              <TouchableOpacity style={styles.card}>
+                <Text>Card 1</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  borderRadius: 35,
-                  padding: 10,
-                  margin: 10,
-                  minWidth: 125,
-                  backgroundColor: activeCard === 4 ? "#eee" : "#fff",
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                }}
-                activeOpacity={0.8}
-                onPress={() => navigateToScreen(4)}
-                onPressIn={() => handleCardPressIn(4)}
-                onPressOut={handleCardPressOut}
-              >
-                {/* Card content */}
-                <Text
-                  style={{
-                    fontSize: 50,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  4
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    marginTop: 8,
-                    bottom: 8,
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Feature
-                </Text>
+            </View>
+            <View style={styles.cardContainer}>
+              <TouchableOpacity style={styles.card}>
+                <Text>Card 1</Text>
               </TouchableOpacity>
-              {/* Other cards */}
+            </View>
+            <View style={styles.cardContainer}>
+              <TouchableOpacity style={styles.card}>
+                <Text>Card 1</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.cardContainer}>
+              <TouchableOpacity style={styles.card}>
+                <Text>Card 1</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -221,3 +75,36 @@ export default function ChallengeScreen() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    paddingHorizontal: 16,
+    marginBottom: 40,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 26,
+  },
+  cardContainer: {
+    height: 90,
+    width: 100,
+    backgroundColor: "white",
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    overflow: "hidden",
+  },
+  card: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
