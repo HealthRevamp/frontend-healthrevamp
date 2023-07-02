@@ -1,27 +1,72 @@
-import * as React from "react";
-import { PaperProvider } from "react-native-paper";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  Button,
   Image,
-  Pressable,
   TouchableOpacity,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector, useDispatch } from "react-redux";
+import { doLogin } from "../actions/action";
+import { selectData, selectLoading, selectError } from "../slice/selector";
 export default function Login() {
   const { navigate } = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const loading = useSelector(selectLoading);
+  const dispatch = useDispatch();
+
   const onClickRegister = () => {
     navigate("RegisterPage");
   };
+
   const onClickLogin = () => {
-    navigate("Dashboard");
+    const move = () => {
+      navigate("Dashboard");
+    };
+    const AlertSuccess = () => {
+      Alert.alert("Success", "Login successful!");
+    };
+    const AlertFailed = () => {
+      Alert.alert("Login failed!", "Check your input");
+    };
+    dispatch(doLogin(email, password, move, AlertSuccess, AlertFailed));
   };
   return (
     <>
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" />
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
+            }}
+          >
+            Patience is part of health
+          </Text>
+        </View>
+      )}
       <View
         style={{
           height: "100%",
@@ -59,21 +104,37 @@ export default function Login() {
         </View>
         {/* Form */}
         <View style={styles.containerForm}>
-          <TextInput placeholder="type your username" style={styles.input} />
-          <TextInput placeholder="type your password" style={styles.input} />
-          <View style={{ padding: 20.0 }}>
-            <LinearGradient
-              colors={["#0C6EB1", "#22C49D"]}
-              start={[0, 0]}
-              end={[1, 0]}
-              style={styles.button}
-              onPress={onClickLogin}
-            >
-              <TouchableOpacity onPress={onClickLogin}>
+          <TextInput
+            placeholder="type your email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="type your password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.input}
+          />
+          <TouchableOpacity
+            onPress={onClickLogin}
+            underlayColor="transparent"
+            activeOpacity={1}
+          >
+            <View style={{ padding: 20.0 }}>
+              <LinearGradient
+                colors={["#0C6EB1", "#22C49D"]}
+                start={[0, 0]}
+                end={[1, 0]}
+                style={styles.button}
+                onPress={onClickLogin}
+              >
                 <Text style={styles.text}>Login</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-          </View>
+              </LinearGradient>
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity onPress={onClickRegister}>
             <Text
               style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}

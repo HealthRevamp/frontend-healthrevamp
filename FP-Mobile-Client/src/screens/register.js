@@ -1,20 +1,84 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { PaperProvider } from "react-native-paper";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  Button,
   Image,
-  Pressable,
   ScrollView,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
+import { useNavigation } from "@react-navigation/native";
+import { doRegister } from "../actions/action";
+import { selectData, selectLoading, selectError } from "../slice/selector";
+import { useSelector, useDispatch } from "react-redux";
 export default function Register() {
+  const { navigate } = useNavigation();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [height, setHeight] = useState("");
+  const [width, setWidth] = useState("");
+  const loading = useSelector(selectLoading);
+  const dispatch = useDispatch();
+
+  const handleRegister = async () => {
+    const move = () => {
+      navigate("LoginPage");
+    };
+    const AlertSuccess = () => {
+      Alert.alert("Success", "Register successful!");
+    };
+    const AlertFailed = () => {
+      Alert.alert("Login failed!", "Check your input");
+    };
+    dispatch(
+      doRegister(
+        username,
+        email,
+        password,
+        height,
+        width,
+        move,
+        AlertSuccess,
+        AlertFailed
+      )
+    );
+  };
+
   return (
     <>
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" />
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
+            }}
+          >
+            Patience is part of health
+          </Text>
+        </View>
+      )}
       <ScrollView>
         <View
           style={{
@@ -55,21 +119,54 @@ export default function Register() {
           </View>
           {/* Form */}
           <View style={styles.containerForm}>
-            <TextInput placeholder="type your username" style={styles.input} />
-            <TextInput placeholder="type your email" style={styles.input} />
-            <TextInput placeholder="type your password" style={styles.input} />
-            <TextInput placeholder="type your height" style={styles.input} />
-            <TextInput placeholder="type your width" style={styles.input} />
-            <View style={{ padding: 20.0 }}>
-              <LinearGradient
-                colors={["#0C6EB1", "#22C49D"]}
-                start={[0, 0]}
-                end={[1, 0]}
-                style={styles.button}
-              >
-                <Text style={styles.text}>Register</Text>
-              </LinearGradient>
-            </View>
+            <TextInput
+              placeholder="type your username"
+              value={username}
+              onChangeText={setUsername}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="type your email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="type your password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="type your height"
+              value={height}
+              onChangeText={setHeight}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="type your width"
+              value={width}
+              onChangeText={setWidth}
+              style={styles.input}
+            />
+            <TouchableOpacity
+              onPress={handleRegister}
+              underlayColor="transparent"
+              activeOpacity={1}
+            >
+              <View style={{ padding: 20.0 }}>
+                <LinearGradient
+                  colors={["#0C6EB1", "#22C49D"]}
+                  start={[0, 0]}
+                  end={[1, 0]}
+                  style={styles.button}
+                >
+                  <Text style={styles.text}>Register</Text>
+                </LinearGradient>
+              </View>
+            </TouchableOpacity>
           </View>
           <View style={{ bottom: 0, position: "relative", paddingLeft: 10 }}>
             <Image
