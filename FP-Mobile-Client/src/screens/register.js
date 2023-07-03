@@ -100,7 +100,7 @@ export default function Register() {
                 }}
               >
                 <Image
-                  source={require("../../assets/Logo.png")}
+                  source={require("../../assets/logo.png")}
                   style={{ width: "100%", height: 80, resizeMode: "contain" }}
                 />
               </View>
