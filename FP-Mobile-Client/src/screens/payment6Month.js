@@ -51,6 +51,10 @@ const PaymentScreen = () => {
         },
       });
       console.log("Success from promise", paymentIntent);
+      // updaate end subs 
+      // body: JSON.stringify({
+      //   endSub: 180,
+      // }),
       // ...
     } catch (e) {
       // ...

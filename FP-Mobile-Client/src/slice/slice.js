@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   error: null,
+  searchResult: null
 };
 
 export const actionCreator = createSlice({
@@ -20,10 +21,15 @@ export const actionCreator = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    fetchSearch: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.searchResult = action.payload
+    }
   },
 });
 
-export const { fetchDataStart, fetchDataSuccess, fetchDataFailure } =
+export const { fetchDataStart, fetchDataSuccess, fetchDataFailure, fetchSearch } =
   actionCreator.actions;
 
 export default actionCreator.reducer;
