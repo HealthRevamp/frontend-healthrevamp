@@ -23,7 +23,7 @@ import { doSearch } from "../actions/action";
 import { search } from "../slice/selector";
 const subjects = [
   { id: 1, image: require("../../assets/run-icon.png"), navigate: "Run" },
-  { id: 2, image: require("../../assets/habits-icon.png"), navigate: "" },
+  { id: 2, image: require("../../assets/habits-icon.png"), navigate: "Habbit" },
   {
     id: 3,
     image: require("../../assets/challange-icon.png"),
