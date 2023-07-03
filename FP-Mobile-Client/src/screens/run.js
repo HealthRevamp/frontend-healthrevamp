@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useEffect, useRef, useState } from "react";
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from "react-native-maps";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -8,7 +15,7 @@ import { googleMapApi } from "../config/apiKey";
 import Geolocation from "react-native-geolocation-service";
 import * as Location from "expo-location";
 import { getDistance } from "geolib";
-
+import { LinearGradient } from "expo-linear-gradient";
 export default function Run() {
   const mapRef = useRef(null);
   const [userLocation, setUserLocation] = useState(null);
@@ -118,87 +125,181 @@ export default function Run() {
       console.log(err);
     }
   };
-  // useEffect(() => {
-  //   updateUserLocation(); // Call immediately
-  //   const intervalId = setInterval(updateUserLocation, 5000);
-  //   return () => {
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
+  useEffect(() => {
+    updateUserLocation(); // Call immediately
+  }, []);
   return (
     <>
-      <View style={styles.container}>
-        <MapView
-          ref={mapRef}
-          provider={PROVIDER_GOOGLE}
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          userLocationUpdateInterval={5000}
-          onUserLocationChange={() => updateUserLocation()}
-          style={styles.map}
-        >
-          {polylineMap.length > 0 && (
-            <>
-              <Marker
-                coordinate={{
-                  latitude: polylineMap[0].latitude,
-                  longitude: polylineMap[0].longitude,
-                }}
-                title="Origin"
-                pinColor="blue"
-              />
-              <Marker
-                coordinate={{
-                  latitude: polylineMap[polylineMap.length - 1].latitude,
-                  longitude: polylineMap[polylineMap.length - 1].longitude,
-                }}
-                title="Destination"
-                pinColor="green"
-              />
-            </>
-          )}
-
-          <Polyline
-            coordinates={polylineMap}
-            strokeColor="red" // fallback for when `strokeColors` is not supported by the map-provider
-            strokeWidth={3}
-          />
-        </MapView>
-        <Text>{totalDistance * 1000}</Text>
-        <View style={styles.autocompleteContainer}>
-          <GooglePlacesAutocomplete
-            placeholder="Search"
-            onPress={(data, details = null) => {
-              // 'details' is provided when fetchDetails = true
-              setPlaceIdOrigin(data?.place_id);
-              console.log(data?.place_id);
+      <ScrollView>
+        <View style={{ padding: 20, backgroundColor: '#22C49D'}}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "bold",
+              textAlign: "center",
+              marginBottom: 10,
+              color: '#fff' 
             }}
-            query={{
-              key: googleMapApi,
-              language: "en",
-            }}
-          />
-          <GooglePlacesAutocomplete
-            placeholder="Search"
-            onPress={(data, details = null) => {
-              // 'details' is provided when fetchDetails = true
-              setPlaceIdDestination(data?.place_id);
-              console.log(data?.place_id);
-            }}
-            query={{
-              key: googleMapApi,
-              language: "en",
-            }}
-          />
-          <Button title="test" onPress={() => onPress()} />
+          >
+            Total Distance
+          </Text>
+          <Text style={{ textAlign: "center", color: '#fff', fontWeight: 'bold' }}>{totalDistance * 1000}</Text>
         </View>
-      </View>
+        <View style={styles.container}>
+          <MapView
+            ref={mapRef}
+            provider={PROVIDER_GOOGLE}
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            showsUserLocation={true}
+            showsMyLocationButton={true}
+            userLocationUpdateInterval={5000}
+            onUserLocationChange={() => updateUserLocation()}
+            style={styles.map}
+          >
+            {polylineMap.length > 0 && (
+              <>
+                <Marker
+                  coordinate={{
+                    latitude: polylineMap[0].latitude,
+                    longitude: polylineMap[0].longitude,
+                  }}
+                  title="Origin"
+                  pinColor="blue"
+                />
+                <Marker
+                  coordinate={{
+                    latitude: polylineMap[polylineMap.length - 1].latitude,
+                    longitude: polylineMap[polylineMap.length - 1].longitude,
+                  }}
+                  title="Destination"
+                  pinColor="green"
+                />
+              </>
+            )}
+
+            <Polyline
+              coordinates={polylineMap}
+              strokeColor="red" // fallback for when `strokeColors` is not supported by the map-provider
+              strokeWidth={3}
+            />
+          </MapView>
+          <View style={styles.autocompleteContainer}>
+            <GooglePlacesAutocomplete
+              placeholder="Location Start"
+              onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                setPlaceIdOrigin(data?.place_id);
+                console.log(data?.place_id);
+              }}
+              query={{
+                key: googleMapApi,
+                language: "en",
+              }}
+              styles={{
+                container: {
+                  flex: 1,
+                  zIndex: 1
+                },
+                textInputContainer: {
+                  backgroundColor: "#f1f1f1",
+                  borderTopWidth: 0,
+                  borderBottomWidth: 0,
+                  borderRadius: 18,
+                  zIndex: 1
+                },
+                textInput: {
+                  margin: 12,
+                  borderWidth: 1,
+                  paddingLeft: 20,
+                  backgroundColor: "#EEEEEE",
+                  borderColor: "#EEEEEE",
+                  shadowColor: "#9B9B9B",
+                  zIndex: 1
+                },
+                predefinedPlacesDescription: {
+                  color: "#333333",
+                  zIndex: 1
+                },
+              }}
+            />
+            <GooglePlacesAutocomplete
+              placeholder="Destination"
+              onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                setPlaceIdDestination(data?.place_id);
+                console.log(data?.place_id);
+              }}
+              query={{
+                key: googleMapApi,
+                language: "en",
+              }}
+              styles={{
+                container: {
+                  flex: 1,
+                },
+                textInputContainer: {
+                  backgroundColor: "#f1f1f1",
+                  borderTopWidth: 0,
+                  borderBottomWidth: 0,
+                  borderRadius: 18,
+                  zIndex: 1
+                },
+                textInput: {
+                  margin: 12,
+                  borderWidth: 1,
+                  paddingLeft: 20,
+                  backgroundColor: "#EEEEEE",
+                  borderColor: "#EEEEEE",
+                  shadowColor: "#9B9B9B",
+                  zIndex: 1
+                },
+                predefinedPlacesDescription: {
+                  color: "#333333",
+                  zIndex: 1
+                },
+              }}
+            />
+            <TouchableOpacity onPress={() => onPress()} underlayColor="transparent"
+              activeOpacity={1}>
+              <LinearGradient
+                colors={["#0C6EB1", "#22C49D"]}
+                start={[0, 0]}
+                end={[1, 0]}
+                style={styles.button} 
+              >
+                <Text style={styles.text}>Set Route</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => onPress()} underlayColor="transparent"
+              activeOpacity={1}>
+              <LinearGradient
+                colors={["#0C6EB1", "#22C49D"]}
+                start={[0, 0]}
+                end={[1, 0]}
+                style={styles.button} 
+              >
+                <Text style={styles.text}>Start</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => onPress()} underlayColor="transparent"
+              activeOpacity={1}>
+              <LinearGradient
+                colors={["#0C6EB1", "#22C49D"]}
+                start={[0, 0]}
+                end={[1, 0]}
+                style={styles.button} 
+              >
+                <Text style={styles.text}>Finish</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
     </>
   );
 }
@@ -211,9 +312,27 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   autocompleteContainer: {
-    height: 400,
+    height: 420,
     paddingHorizontal: 16,
-    paddingTop: 16,
     backgroundColor: "white",
+    paddingBottom: 40,
+    paddingTop: 40,
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 18,
+    elevation: 3,
+    backgroundColor: "#0C6EB1",
+    marginTop: 20
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "white",
   },
 });

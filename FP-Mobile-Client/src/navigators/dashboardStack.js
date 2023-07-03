@@ -1,5 +1,5 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   StyleSheet,
   Text,
@@ -10,14 +10,16 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 import DashboardPage from "../screens/dashboard";
 import FoodNListPage from "../screens/foodNutrition";
 import ChallengePage from "../screens/challange";
-import PaymentStack from "../navigators/paymentStack";
+import PaymentStack from "./paymentStack";
 import RunPage from "../screens/run";
 export default function DashboardTabs() {
   return (
-    <Tab.Navigator
+    <Stack.Navigator
+      initialRouteName="Dashboard"
       screenOptions={{
         headerStyle: {
           backgroundColor: "#1E87CE",
@@ -34,12 +36,12 @@ export default function DashboardTabs() {
         tabBarInactiveTintColor: '#fff'
       }}
     >
-      <Tab.Screen name="Home" component={DashboardPage} />
-      <Tab.Screen name="Food Nutrition" component={FoodNListPage} />
-      <Tab.Screen name="Challenge" component={ChallengePage} />
-      <Tab.Screen name="Payment" component={PaymentStack} />
-      <Tab.Screen name="Run" component={RunPage} />
-    </Tab.Navigator>
+      <Stack.Screen name="Home" component={DashboardPage} />
+      <Stack.Screen name="Food Nutrition" component={FoodNListPage} />
+      <Stack.Screen name="Challenge" component={ChallengePage} />
+      <Stack.Screen name="Payment" component={PaymentStack} />
+      <Stack.Screen name="Run" component={RunPage} />
+    </Stack.Navigator>
   );
 }
 

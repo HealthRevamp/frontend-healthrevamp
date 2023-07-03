@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet, Text, View, ScrollView, LogBox } from "react-native";
 import MainStack from "./src/navigators/stackNav";
-import DashboardTabs from "./src/navigators/dashboardTabs.js";
+import bottomNav from "./src/navigators/bottomNav.js";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { publishableKey } from "./src/config/apiKey";
@@ -31,7 +31,7 @@ export default function App() {
               <Stack.Screen name="Login" component={MainStack} />
               <Stack.Screen
                 name="Dashboard"
-                component={DashboardTabs}
+                component={bottomNav}
                 options={{
                   headerShown: false,
                 }}

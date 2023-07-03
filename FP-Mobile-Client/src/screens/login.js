@@ -88,8 +88,8 @@ export default function Login() {
               }}
             >
               <Image
-                source={require("../../assets/logo.png")}
-                style={{ width: "100%", resizeMode: "contain" }}
+                source={require("../../assets/Logo.png")}
+                style={{ width: "100%", height: 80, resizeMode: "contain" }}
               />
             </View>
           </View>
