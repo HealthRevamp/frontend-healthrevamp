@@ -171,7 +171,16 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: "#EEEEEE",
     borderColor: "#EEEEEE",
-    shadowColor: "#9B9B9B",
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    overflow: "hidden",
+    borderRadius: 18,
   },
   button: {
     alignItems: "center",

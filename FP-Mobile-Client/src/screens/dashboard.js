@@ -12,27 +12,121 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
+import { useSelector, useDispatch } from "react-redux";
+import { doSearch } from "../actions/action";
+import { search } from "../slice/selector";
 const subjects = [
-  { id: 1, image: require("../../assets/run-icon.png"), navigate: 'Run'},
-  { id: 2, image: require("../../assets/habits-icon.png"), navigate: ''},
-  { id: 3, image: require("../../assets/challange-icon.png"), navigate: 'Challenge'},
-  { id: 4, image: require("../../assets/nutrition-information-icon.png"), navigate: 'Food Nutrition' },
+  { id: 1, image: require("../../assets/run-icon.png"), navigate: "Run" },
+  { id: 2, image: require("../../assets/habits-icon.png"), navigate: "" },
+  {
+    id: 3,
+    image: require("../../assets/challange-icon.png"),
+    navigate: "Challenge",
+  },
+  {
+    id: 4,
+    image: require("../../assets/nutrition-information-icon.png"),
+    navigate: "Food Nutrition",
+  },
 ];
 
 const cardGap = 16;
 
 const cardWidth = (Dimensions.get("window").width - cardGap * 3) / 2;
-export default function DashboardPage() {
+export default function DashboardPage({ clicked, setClicked }) {
+  const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
+  const onClickSearch = () => {
+    dispatch(doSearch(search));
+  };
   const { navigate } = useNavigation();
+  const [displayRank, setDisplayRank] = useState("none");
+
   useEffect(() => {
     return async () => {};
   }, []);
+
+  const seeRank = () => {
+    setDisplayRank("flex");
+  };
   return (
     <>
       <ScrollView>
+        <View
+          style={{
+            display: displayRank,
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "flex-start",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.9,
+          }}
+        >
+          <View style={{ marginTop: 60 }}>
+            <Text
+              style={{
+                textAlign: "center",
+                color: "#fff",
+                fontWeight: "bold",
+                fontSize: 30,
+              }}
+            >
+              Rank
+            </Text>
+            <View
+              style={{
+                backgroundColor: "white",
+                width: 360,
+                paddingHorizontal: 10,
+                paddingVertical: 20,
+                marginTop: 10,
+                borderRadius: 10,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ flex: 1, color: "#000" }}>No</Text>
+                <Text style={{ flex: 1, color: "#000" }}>Name</Text>
+                <Text style={{ flex: 1, color: "#000" }}>Total Distance</Text>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ flex: 1, color: "#000" }}>1</Text>
+                <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
+                <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ flex: 1, color: "#000" }}>1</Text>
+                <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
+                <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ flex: 1, color: "#000" }}>1</Text>
+                <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
+                <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ flex: 1, color: "#000" }}>1</Text>
+                <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
+                <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
+              </View>
+            </View>
+          </View>
+        </View>
         <View>
           {/* Profile */}
           <View style={styles.containerProfile}>
@@ -49,17 +143,62 @@ export default function DashboardPage() {
           </View>
 
           {/* give rank */}
-          <View style={styles.containerGiveRank}>
-            <Text style={styles.textGiveRank}>Check your rank</Text>
-            <Ionicons
-              name="star-outline"
-              style={{
-                textAlign: "center",
-                fontSize: 20,
-                color: "blue",
-              }}
-            />
-          </View>
+          <TouchableOpacity
+            onPress={() => seeRank()}
+            underlayColor="transparent"
+            activeOpacity={1}
+          >
+            <View style={styles.containerGiveRank}>
+              <Text style={styles.textGiveRank}>Check your rank</Text>
+              <Ionicons
+                name="star-outline"
+                style={{
+                  textAlign: "center",
+                  fontSize: 20,
+                  color: "blue",
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+
+          {/* Search Nutrition */}
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            accessible={false}
+          >
+            <View style={styles.containerNutrition}>
+              <View
+                style={
+                  clicked
+                    ? styles.searchBar__clicked
+                    : styles.searchBar__unclicked
+                }
+              >
+                <Feather
+                  name="search"
+                  size={20}
+                  color="black"
+                  style={{ marginLeft: 1 }}
+                />
+                {/* Input field */}
+                <TextInput
+                  style={styles.inputNutrition}
+                  placeholder="Search"
+                  value={search}
+                  onSubmitEditing={() => onClickSearch()}
+                  onChangeText={setSearch}
+                />
+              </View>
+              <View>
+                <TouchableOpacity
+                  style={{ paddingLeft: 3 }}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                  }}
+                ></TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
 
           {/* calories */}
           <View style={styles.containerCalories}>
@@ -125,7 +264,10 @@ export default function DashboardPage() {
                       },
                     ]}
                   >
-                    <TouchableOpacity style={styles.card} onPress={() => navigate(subject.navigate)}>
+                    <TouchableOpacity
+                      style={styles.card}
+                      onPress={() => navigate(subject.navigate)}
+                    >
                       <Image
                         key={i}
                         source={subject.image}
@@ -144,6 +286,38 @@ export default function DashboardPage() {
 }
 
 const styles = StyleSheet.create({
+  containerNutrition: {
+    margin: 10,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "87%",
+    flex: 1,
+    paddingTop: 9,
+  },
+  searchBar__unclicked: {
+    padding: 10,
+    flexDirection: "row",
+    width: "95%",
+    backgroundColor: "#d9dbda",
+    borderRadius: 15,
+    alignItems: "center",
+  },
+  searchBar__clicked: {
+    padding: 10,
+    flexDirection: "row",
+    width: "80%",
+    backgroundColor: "#d9dbda",
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  inputNutrition: {
+    fontSize: 20,
+    marginLeft: 10,
+    width: "90%",
+  },
+  // =====================
   container: {
     flexGrow: 1,
     paddingHorizontal: 16,

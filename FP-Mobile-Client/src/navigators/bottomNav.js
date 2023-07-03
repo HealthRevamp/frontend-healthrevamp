@@ -25,7 +25,7 @@ export default function DashboardTabs() {
               iconName = focused ? "ios-home" : "ios-home-outline";
             } else if (route.name === "Update Profile") {
               iconName = focused ? "ios-person" : "ios-person-outline";
-            }else if (route.name === "Payment") {
+            } else if (route.name === "Payment") {
               iconName = focused ? "ios-card" : "ios-card-outline";
             }
 
@@ -43,14 +43,18 @@ export default function DashboardTabs() {
           tabBarStyle: {
             backgroundColor: "#1E87CE",
           },
-          tabBarActiveTintColor: '#fff',
-          tabBarInactiveTintColor: '#fff'
+          tabBarActiveTintColor: "#fff",
+          tabBarInactiveTintColor: "#fff",
         };
       }}
     >
-      <Tab.Screen name="Dashboard" component={DashboardStack} options={{
-        headerShown: false
-      }}/>
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardStack}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Tab.Screen name="Update Profile" component={UpdateProfile} />
       <Tab.Screen name="Payment" component={PaymentStack} />
     </Tab.Navigator>

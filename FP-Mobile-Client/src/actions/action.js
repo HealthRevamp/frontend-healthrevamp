@@ -2,6 +2,7 @@ import {
   fetchDataStart,
   fetchDataSuccess,
   fetchDataFailure,
+  fetchSearch
 } from "../slice/slice";
 import { BASE_URL } from "../config/base-API";
 export const doLogin = (email, password, move, AlertSuccess, AlertFailed) => {
@@ -61,6 +62,24 @@ export const doRegister = (
     } catch (error) {
       dispatch(fetchDataFailure(error));
       AlertFailed();
+    }
+  };
+};
+
+export const doSearch = (dataInput) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(`https://serpapi.com/search.json?q=${dataInput}&hl=en&gl=us&google_domain=google.com`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataInput),
+      });
+      // dispatch(fetchSearch(response));
+      console.log(response)
+    } catch (error) {
+      dispatch(fetchDataFailure(error));
     }
   };
 };
