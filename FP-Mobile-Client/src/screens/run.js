@@ -52,7 +52,7 @@ export default function Run() {
 
           console.log(distance, totalDistance );
 
-          if (distance > 0.01) {
+          if (distance > 0.0001) {
             setTotalDistance(totalDistance + distance);
           }
         }
@@ -144,7 +144,7 @@ export default function Run() {
   };
   return (
     <>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps={'handled'}>
         <View
           style={{
             display: seeTotalDistance,
@@ -277,6 +277,7 @@ export default function Run() {
                   // 'details' is provided when fetchDetails = true
                   setPlaceIdOrigin(data?.place_id);
                   console.log(data?.place_id);
+                  console.log(details?.geometry);
                 }}
                 query={{
                   key: googleMapApi,
@@ -328,6 +329,8 @@ export default function Run() {
                   // 'details' is provided when fetchDetails = true
                   setPlaceIdDestination(data?.place_id);
                   console.log(data?.place_id);
+                  console.log(details?.geometry);
+
                 }}
                 query={{
                   key: googleMapApi,
