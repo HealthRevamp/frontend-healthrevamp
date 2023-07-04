@@ -19,6 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 export default function Run() {
   const mapRef = useRef(null);
   const [userLocation, setUserLocation] = useState(null);
+  const [permission, setPermission] = useState("");
   const [prevLocation, setPrevLocation] = useState(null);
   const [totalDistance, setTotalDistance] = useState(0);
   const [polylineMap, setPolylineMap] = useState([]);
@@ -30,18 +31,20 @@ export default function Run() {
   const locationChange = (location) => {
     console.log(location);
   };
+  const permissionLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    setPermission(status);
+  };
   const onPress = () => {
     postMap(placeIdOrigin, placeIdDestination);
   };
   const updateUserLocation = async () => {
     try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        const location = await Location.getCurrentPositionAsync();
-        const { latitude, longitude } = location.coords;
-
-        setUserLocation({ latitude, longitude });
-
+      // const { status } = await Location.requestForegroundPermissionsAsync();
+      const location = await Location.getCurrentPositionAsync();
+      const { latitude, longitude } = location.coords;
+      setUserLocation({ latitude, longitude });
+      if (permission == "granted" && Run == true) {
         if (prevLocation) {
           const distance = calculateDistance(
             prevLocation.latitude,
@@ -50,7 +53,7 @@ export default function Run() {
             longitude
           );
 
-          console.log(distance, totalDistance );
+          console.log(distance, totalDistance);
 
           if (distance > 0.0001) {
             setTotalDistance(totalDistance + distance);
@@ -96,13 +99,25 @@ export default function Run() {
         data: {
           origin: {
             // Union field location_type can be only one of the following:
-            placeId: placeIdOrigin,
+            // placeId: placeIdOrigin,
             // End of list of possible types for union field location_type.
+            location: {
+              latLng: {
+                latitude: placeIdOrigin.lat,
+                longitude: placeIdOrigin.lng,
+              },
+            },
           },
           destination: {
             // Union field location_type can be only one of the following:
-            placeId: placeIdDestination,
+            // placeId: placeIdDestination,
             // End of list of possible types for union field location_type.
+            location: {
+              latLng: {
+                latitude: placeIdDestination.lat,
+                longitude: placeIdDestination.lng,
+              },
+            },
           },
         },
         headers: {
@@ -142,9 +157,12 @@ export default function Run() {
     setRun(false);
     setSeeTotalDistance("flex");
   };
+  useEffect(() => {
+    permissionLocation();
+  }, []);
   return (
     <>
-      <ScrollView keyboardShouldPersistTaps={'handled'}>
+      <ScrollView keyboardShouldPersistTaps={"handled"}>
         <View
           style={{
             display: seeTotalDistance,
@@ -195,7 +213,7 @@ export default function Run() {
             }}
             showsUserLocation={true}
             showsMyLocationButton={true}
-            userLocationUpdateInterval={0}
+            userLocationUpdateInterval={1000}
             onUserLocationChange={() => updateUserLocation()}
             style={styles.map}
           >
@@ -273,11 +291,13 @@ export default function Run() {
               <GooglePlacesAutocomplete
                 listViewDisplayed={false}
                 placeholder="Location Start"
+                fetchDetails={true}
                 onPress={(data, details = null) => {
                   // 'details' is provided when fetchDetails = true
                   setPlaceIdOrigin(data?.place_id);
                   console.log(data?.place_id);
-                  console.log(details?.geometry);
+                  console.log(details?.geometry?.location);
+                  setPlaceIdOrigin(details?.geometry?.location);
                 }}
                 query={{
                   key: googleMapApi,
@@ -325,12 +345,13 @@ export default function Run() {
               <GooglePlacesAutocomplete
                 listViewDisplayed={false}
                 placeholder="Destination"
+                fetchDetails={true}
                 onPress={(data, details = null) => {
                   // 'details' is provided when fetchDetails = true
-                  setPlaceIdDestination(data?.place_id);
+                  // setPlaceIdDestination(data?.place_id);
                   console.log(data?.place_id);
-                  console.log(details?.geometry);
-
+                  console.log(details?.geometry?.location);
+                  setPlaceIdDestination(details?.geometry?.location);
                 }}
                 query={{
                   key: googleMapApi,
