@@ -22,6 +22,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const loading = useSelector(selectLoading);
+
   const dispatch = useDispatch();
 
   const onClickRegister = () => {
@@ -38,7 +39,17 @@ export default function Login() {
     const AlertFailed = () => {
       Alert.alert("Login failed!", "Check your input");
     };
-    dispatch(doLogin(email, password, move, AlertSuccess, AlertFailed));
+    const storeData = async (token) => {
+      try {
+        await AsyncStorage.setItem("access_token", token);
+        console.log("Success setItem");
+      } catch (error) {
+        console.log("error setItem");
+      }
+    };
+    dispatch(
+      doLogin(email, password, move, AlertSuccess, AlertFailed, storeData)
+    );
   };
   return (
     <>

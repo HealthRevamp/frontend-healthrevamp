@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PaperProvider } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   StyleSheet,
   Text,
@@ -16,13 +17,36 @@ import { useNavigation } from "@react-navigation/native";
 import { doAddhabbits } from "../actions/action";
 import { selectData, selectLoading, selectError } from "../slice/selector";
 import { useSelector, useDispatch } from "react-redux";
+import { getAllHabbits } from "../slice/slice";
+import { addHabbits } from "../slice/slice";
+import { delHabbits } from "../slice/slice";
+import { LongPressGestureHandler, State } from "react-native-gesture-handler";
 
 export default function Habbits() {
   const { navigate } = useNavigation();
   const dispatch = useDispatch();
   const [displayAddHabbits, setDisplayAddHabbits] = useState("none");
+
+  const { habbitsData } = useSelector((state) => state.user);
+  const data = habbitsData.habits;
+
+  const storeData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("access_token");
+      if (value !== null) {
+        dispatch(getAllHabbits(value));
+        // console.log(value, '<<<<< ini token');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    storeData();
+  }, []);
+  // everyting form
   const seeForm = () => {
-    // console.log('hai');
     setDisplayAddHabbits("flex");
   };
   const hideForm = () => {
@@ -31,13 +55,49 @@ export default function Habbits() {
   const [name, setName] = useState("");
   const [time, setTime] = useState("");
   const [description, setDescription] = useState("");
+
   const move = () => {
     setDisplayAddHabbits("none");
   };
   const handleAddHabbits = async () => {
-    dispatch(doAddhabbits(name, time, description), console.log("anjing"));
+    storeDataAdd();
+  };
+  const storeDataAdd = async () => {
+    try {
+      const move = () => {
+        navigate("Habbit");
+      };
+      const AlertSuccess = () => {
+        Alert.alert("Success", "Add successful!");
+        move();
+      };
+      const AlertFailed = () => {
+        Alert.alert("Adding failed!", "Check your input");
+      };
+      const value = await AsyncStorage.getItem("access_token");
+      if (value !== null) {
+        dispatch(
+          addHabbits({
+            value,
+            name,
+            time,
+            description,
+            AlertSuccess,
+            AlertFailed,
+            move,
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  const onLongPress = (event) => {
+    if (event.nativeEvent.state === State.ACTIVE) {
+      alert("I've been pressed for 800 milliseconds");
+    }
+  };
   const subjects = [
     {
       id: 1,
@@ -64,6 +124,28 @@ export default function Habbits() {
       description: "lorem 4 mejikuhibiniu abc 5 dasar ditaman ",
     },
   ];
+
+  const delData = async (id) => {
+    try {
+      const value = await AsyncStorage.getItem("access_token");
+      if (value !== null) {
+        dispatch(delHabbits({ value, id }));
+        useEffect(() => {
+          storeData();
+        }, []);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const longPress = (id) => {
+    delData(id);
+  };
+
+  const onePress = () => {
+    alert("Hold to delete habbits");
+  };
 
   return (
     <>
@@ -161,47 +243,52 @@ export default function Habbits() {
           </LinearGradient>
         </TouchableOpacity>
         <View style={{ padding: 2 }}>
-          {subjects.map((el, i) => {
+          {data?.map((el, i) => {
             return (
               <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  borderRadius: 35,
-                  padding: 10,
-                  margin: 10,
-                  minWidth: 125,
-                  backgroundColor: "#fff",
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                }}
+                onLongPress={() => longPress(el.id)}
+                onPress={onePress}
               >
-                {/* Card content */}
-                <View>
-                  <Image
-                    source={require("../../assets/habits-icon.png")}
-                    style={{ width: 100, height: 100 }}
-                  />
-                </View>
-                <View key={i} style={{ marginLeft: 10, marginTop: 6 }}>
-                  <Text
-                    style={{
-                      fontSize: 24,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {el.name}
-                  </Text>
-                  <Text style={{ fontWeight: "bold", paddingTop: 10 }}>
-                    {el.time}
-                  </Text>
-                  <Text style={{ paddingTop: 10 }}>{el.description}</Text>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    borderRadius: 35,
+                    padding: 10,
+                    margin: 10,
+                    minWidth: 125,
+                    backgroundColor: "#fff",
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5,
+                  }}
+                >
+                  {/* Card content */}
+                  <View>
+                    <Image
+                      source={require("../../assets/habits-icon.png")}
+                      style={{ width: 100, height: 100 }}
+                    />
+                  </View>
+                  <View key={i} style={{ marginLeft: 10, marginTop: 6 }}>
+                    <Text
+                      style={{
+                        fontSize: 24,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {el.name}
+                    </Text>
+                    <Text style={{ fontWeight: "bold", paddingTop: 10 }}>
+                      {el.time}
+                    </Text>
+                    <Text style={{ paddingTop: 10 }}>{el.description}</Text>
+                  </View>
                 </View>
               </TouchableOpacity>
             );

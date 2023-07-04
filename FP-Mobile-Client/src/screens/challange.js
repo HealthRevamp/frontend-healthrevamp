@@ -1,14 +1,42 @@
-import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Text,
   View,
-  TouchableOpacity,
+  TouchableHighlight,
   ScrollView,
   StyleSheet,
+  FlatList,
 } from "react-native";
-
+import { useDispatch, useSelector } from "react-redux";
+import { selectGetActivities } from "../slice/selector";
+import { getActivities } from "../actions/action";
+import Ionicons from "@expo/vector-icons/Ionicons";
 export default function ChallengeScreen() {
+  const [cardPressed, setCardPressed] = useState("");
+  const navigation = useNavigation();
+  const activities = useSelector(selectGetActivities);
+  const dispatch = useDispatch();
+  // console.log(activities, "<< dtaa");
+
+  const navigateOnPressed = (id) => {
+    navigation.navigate("ChallengeStart", { id });
+    // console.log(id);
+  };
+
+  const onPressedIn = (i) => {
+    setCardPressed(i);
+  };
+
+  const onPressedOut = () => {
+    setCardPressed(null);
+  };
+
+  useEffect(() => {
+    dispatch(getActivities());
+  }, []);
+
   return (
     <>
       <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -19,7 +47,7 @@ export default function ChallengeScreen() {
               paddingLeft: 50,
               paddingRight: 50,
               display: "flex",
-              flexDirection: "row"
+              flexDirection: "row",
             }}
           >
             <Image
@@ -39,36 +67,29 @@ export default function ChallengeScreen() {
             Challenge
           </Text>
           <View style={styles.container}>
-            <View style={styles.cardContainer}>
-              <TouchableOpacity style={styles.card}>
-                <Text>Card 1</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.cardContainer}>
-              <TouchableOpacity style={styles.card}>
-                <Text>Card 1</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.cardContainer}>
-              <TouchableOpacity style={styles.card}>
-                <Text>Card 1</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.cardContainer}>
-              <TouchableOpacity style={styles.card}>
-                <Text>Card 1</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.cardContainer}>
-              <TouchableOpacity style={styles.card}>
-                <Text>Card 1</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.cardContainer}>
-              <TouchableOpacity style={styles.card}>
-                <Text>Card 1</Text>
-              </TouchableOpacity>
-            </View>
+            {activities?.map((el) => (
+              <TouchableHighlight
+                key={el._id}
+                style={[
+                  styles.cardContainer,
+                  cardPressed === el.id && styles.cardContainerPressed,
+                ]}
+                onPressIn={() => onPressedIn(el._id)}
+                onPressOut={onPressedOut}
+                onPress={() => navigateOnPressed(el._id)}
+                underlayColor="#dcdcdc"
+              >
+                <View style={styles.card}>
+                  <Image
+                    source={require("../../assets/activity.png")}
+                    style={{ width: 50, height: 50 }}
+                  />
+                  <Text style={{ textTransform: "capitalize", textAlign:'center'}}>
+                    {el.activity}
+                  </Text>
+                </View>
+              </TouchableHighlight>
+            ))}
           </View>
         </View>
       </ScrollView>
@@ -83,12 +104,13 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: 'space-between',
     gap: 26,
   },
   cardContainer: {
-    height: 90,
-    width: 100,
+    height: 100,
+    width: 150,
+    paddingHorizontal: 10,
     backgroundColor: "white",
     borderRadius: 16,
     justifyContent: "center",
@@ -102,6 +124,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     overflow: "hidden",
+  },
+  cardContainerPressed: {
+    backgroundColor: "#dcdcdc",
   },
   card: {
     justifyContent: "center",
