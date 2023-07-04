@@ -16,7 +16,7 @@ import FoodNListPage from "../screens/foodNutrition";
 import ChallengePage from "../screens/challange";
 import PaymentStack from "./paymentStack";
 import RunPage from "../screens/run";
-import DetailHabbit from "../screens/detailHabit";
+import DetailHabbit from "../screens/ChallengeStart";
 import Habbit from "../screens/habbits";
 export default function DashboardTabs() {
   return (
@@ -43,7 +43,7 @@ export default function DashboardTabs() {
       <Stack.Screen name="Challenge" component={ChallengePage} />
       <Stack.Screen name="Payment" component={PaymentStack} />
       <Stack.Screen name="Run" component={RunPage} />
-      <Stack.Screen name="DetailHabit" component={DetailHabbit} />
+      <Stack.Screen name="ChallengeStart" component={DetailHabbit} />
       <Stack.Screen name="Habbit" component={Habbit} />
     </Stack.Navigator>
   );

@@ -1,26 +1,23 @@
 import React, { useState, AsyncStorage, useEffect } from "react";
-import { PaperProvider } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  Button,
   Image,
-  Pressable,
   ScrollView,
   Dimensions,
   TouchableOpacity,
-  Keyboard,
-  TouchableWithoutFeedback,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
-import { doSearch } from "../actions/action";
-import { search } from "../slice/selector";
+import {
+  selectData,
+  selectLoading,
+  selectError,
+  selectDataUser,
+} from "../slice/selector";
 const subjects = [
   { id: 1, image: require("../../assets/run-icon.png"), navigate: "Run" },
   { id: 2, image: require("../../assets/habits-icon.png"), navigate: "Habbit" },
@@ -39,12 +36,9 @@ const subjects = [
 const cardGap = 16;
 
 const cardWidth = (Dimensions.get("window").width - cardGap * 3) / 2;
-export default function DashboardPage({ clicked, setClicked }) {
+export default function DashboardPage() {
+  const dataUser = useSelector(selectDataUser);
   const [search, setSearch] = useState("");
-  const dispatch = useDispatch();
-  const onClickSearch = () => {
-    dispatch(doSearch(search));
-  };
   const { navigate } = useNavigation();
   const [displayRank, setDisplayRank] = useState("none");
 
@@ -131,7 +125,24 @@ export default function DashboardPage({ clicked, setClicked }) {
           {/* Profile */}
           <View style={styles.containerProfile}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.textProfile}>Hi, Jhon Doe</Text>
+              <Text style={styles.textProfile}>
+                Hi, {dataUser?.username} 
+                {dataUser?.level === 1 ? <Ionicons
+                  name="medal-outline"
+                  style={{
+                    textAlign: "center",
+                    fontSize: 20,
+                    color: "#0C6EB1",
+                  }}
+                /> : <Ionicons
+                name="medal-outline"
+                style={{
+                  textAlign: "center",
+                  fontSize: 20,
+                  color: "green",
+                }}
+              />}
+              </Text>
               <Text style={styles.textHallo}>Let's check your activity</Text>
             </View>
             <View style={{ marginRight: 10 }}>
@@ -160,45 +171,6 @@ export default function DashboardPage({ clicked, setClicked }) {
               />
             </View>
           </TouchableOpacity>
-
-          {/* Search Nutrition */}
-          <TouchableWithoutFeedback
-            onPress={Keyboard.dismiss}
-            accessible={false}
-          >
-            <View style={styles.containerNutrition}>
-              <View
-                style={
-                  clicked
-                    ? styles.searchBar__clicked
-                    : styles.searchBar__unclicked
-                }
-              >
-                <Feather
-                  name="search"
-                  size={20}
-                  color="black"
-                  style={{ marginLeft: 1 }}
-                />
-                {/* Input field */}
-                <TextInput
-                  style={styles.inputNutrition}
-                  placeholder="Search"
-                  value={search}
-                  onSubmitEditing={() => onClickSearch()}
-                  onChangeText={setSearch}
-                />
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={{ paddingLeft: 3 }}
-                  onPress={() => {
-                    Keyboard.dismiss();
-                  }}
-                ></TouchableOpacity>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
 
           {/* calories */}
           <View style={styles.containerCalories}>
@@ -229,7 +201,9 @@ export default function DashboardPage({ clicked, setClicked }) {
                 style={styles.linearStyle}
               >
                 <View style={styles.textContainer}>
-                  <Text style={{ fontSize: 40, fontWeight: "bold" }}>180</Text>
+                  <Text style={{ fontSize: 40, fontWeight: "bold" }}>
+                    {dataUser?.totalCalorie}
+                  </Text>
                   <Text style={{ fontSize: 30 }}>KCL</Text>
                 </View>
               </LinearGradient>
@@ -294,23 +268,6 @@ const styles = StyleSheet.create({
     width: "87%",
     flex: 1,
     paddingTop: 9,
-  },
-  searchBar__unclicked: {
-    padding: 10,
-    flexDirection: "row",
-    width: "95%",
-    backgroundColor: "#d9dbda",
-    borderRadius: 15,
-    alignItems: "center",
-  },
-  searchBar__clicked: {
-    padding: 10,
-    flexDirection: "row",
-    width: "80%",
-    backgroundColor: "#d9dbda",
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "space-evenly",
   },
   inputNutrition: {
     fontSize: 20,

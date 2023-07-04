@@ -50,7 +50,9 @@ export default function Run() {
             longitude
           );
 
-          if (distance > 0.005) {
+          console.log(distance, totalDistance );
+
+          if (distance > 0.0001) {
             setTotalDistance(totalDistance + distance);
           }
         }
@@ -66,6 +68,7 @@ export default function Run() {
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const earthRadius = 6371; // Earth's radius in kilometers
+    // console.log(lat2 - lat1, '<<<< ini lat 1')
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
 
@@ -132,7 +135,7 @@ export default function Run() {
   const startRun = () => {
     setTotalDistance(0);
     updateUserLocation();
-    setHeightRun(800);
+    setHeightRun(600);
     setRun(true);
   };
   const finishRun = () => {
@@ -141,7 +144,7 @@ export default function Run() {
   };
   return (
     <>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps={'handled'}>
         <View
           style={{
             display: seeTotalDistance,
@@ -176,7 +179,7 @@ export default function Run() {
                 fontSize: 20,
               }}
             >
-              {`${Math.ceil(totalDistance * 1000)} m`}
+              {Math.ceil(totalDistance * 1000)}
             </Text>
           </View>
         </View>
@@ -192,7 +195,7 @@ export default function Run() {
             }}
             showsUserLocation={true}
             showsMyLocationButton={true}
-            userLocationUpdateInterval={5000}
+            userLocationUpdateInterval={0}
             onUserLocationChange={() => updateUserLocation()}
             style={styles.map}
           >
@@ -245,7 +248,7 @@ export default function Run() {
                     fontSize: 20,
                   }}
                 >
-                  {`${Math.ceil(totalDistance * 1000)} m`}
+                  {`${Math.ceil(totalDistance * 1000)}  m`}
                 </Text>
               </View>
               <View style={styles.autocompleteContainer}>
@@ -266,144 +269,147 @@ export default function Run() {
               </View>
             </>
           ) : (
-            <View style={styles.autocompleteContainer}>
-              <View style={{ position: "relative", height: 180, zIndex: 1 }}>
-                <GooglePlacesAutocomplete
-                  listViewDisplayed={false}
-                  placeholder="Location Start"
-                  onPress={(data, details = null) => {
-                    // 'details' is provided when fetchDetails = true
-                    setPlaceIdOrigin(data?.place_id);
-                    console.log(data?.place_id);
-                  }}
-                  query={{
-                    key: googleMapApi,
-                    language: "en",
-                  }}
-                  styles={{
-                    container: {
-                      flex: 1,
-                      backgroundColor: "white",
-                      zIndex: 3,
-                      position: "absolute",
-                      top: 0,
-                      width: "100%",
-                      elevation: 4,
-                      shadowColor: "#000",
-                      shadowOffset: {
-                        width: 0,
-                        height: 2,
-                      },
-                      shadowOpacity: 0.2,
-                      shadowRadius: 4,
-                      overflow: "hidden",
-                      borderRadius: 18,
-                      pointerEvents: "auto",
+            <View style={styles.container}>
+              <GooglePlacesAutocomplete
+                listViewDisplayed={false}
+                placeholder="Location Start"
+                onPress={(data, details = null) => {
+                  // 'details' is provided when fetchDetails = true
+                  setPlaceIdOrigin(data?.place_id);
+                  console.log(data?.place_id);
+                  console.log(details?.geometry);
+                }}
+                query={{
+                  key: googleMapApi,
+                  language: "en",
+                }}
+                styles={{
+                  container: {
+                    flex: 1,
+                    backgroundColor: "white",
+                    zIndex: 3,
+                    position: "absolute",
+                    top: 0,
+                    width: "100%",
+                    elevation: 4,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
                     },
-                    textInputContainer: {
-                      backgroundColor: "#EEEEEE",
-                      borderTopWidth: 0,
-                      borderBottomWidth: 0,
-                      borderRadius: 18,
+                    shadowOpacity: 0.2,
+                    shadowRadius: 4,
+                    overflow: "hidden",
+                    borderRadius: 18,
+                    pointerEvents: "auto",
+                  },
+                  textInputContainer: {
+                    backgroundColor: "#EEEEEE",
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                    borderRadius: 18,
+                  },
+                  textInput: {
+                    margin: 12,
+                    borderWidth: 8,
+                    paddingLeft: 20,
+                    backgroundColor: "#EEEEEE",
+                    borderColor: "#EEEEEE",
+                    shadowColor: "#9B9B9B",
+                  },
+                  predefinedPlacesDescription: {
+                    color: "#333333",
+                  },
+                }}
+              />
+              <GooglePlacesAutocomplete
+                listViewDisplayed={false}
+                placeholder="Destination"
+                onPress={(data, details = null) => {
+                  // 'details' is provided when fetchDetails = true
+                  setPlaceIdDestination(data?.place_id);
+                  console.log(data?.place_id);
+                  console.log(details?.geometry);
+
+                }}
+                query={{
+                  key: googleMapApi,
+                  language: "en",
+                }}
+                styles={{
+                  container: {
+                    flex: 1,
+                    backgroundColor: "white",
+                    zIndex: 2,
+                    position: "absolute",
+                    top: 90,
+                    width: "100%",
+                    elevation: 4,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
                     },
-                    textInput: {
-                      margin: 12,
-                      borderWidth: 8,
-                      paddingLeft: 20,
-                      backgroundColor: "#EEEEEE",
-                      borderColor: "#EEEEEE",
-                      shadowColor: "#9B9B9B",
-                    },
-                    predefinedPlacesDescription: {
-                      color: "#333333",
-                    },
-                  }}
-                />
-                <GooglePlacesAutocomplete
-                  listViewDisplayed={false}
-                  placeholder="Destination"
-                  onPress={(data, details = null) => {
-                    // 'details' is provided when fetchDetails = true
-                    setPlaceIdDestination(data?.place_id);
-                    console.log(data?.place_id);
-                  }}
-                  query={{
-                    key: googleMapApi,
-                    language: "en",
-                  }}
-                  styles={{
-                    container: {
-                      flex: 1,
-                      backgroundColor: "white",
-                      zIndex: 2,
-                      position: "absolute",
-                      top: 90,
-                      width: "100%",
-                      elevation: 4,
-                      shadowColor: "#000",
-                      shadowOffset: {
-                        width: 0,
-                        height: 2,
-                      },
-                      shadowOpacity: 0.2,
-                      shadowRadius: 4,
-                      overflow: "hidden",
-                      borderRadius: 18,
-                      pointerEvents: "auto",
-                    },
-                    textInputContainer: {
-                      backgroundColor: "#EEEEEE",
-                      borderTopWidth: 0,
-                      borderBottomWidth: 0,
-                      borderRadius: 18,
-                    },
-                    textInput: {
-                      margin: 12,
-                      borderWidth: 1,
-                      paddingLeft: 20,
-                      backgroundColor: "#EEEEEE",
-                      borderColor: "#EEEEEE",
-                      shadowColor: "#9B9B9B",
-                    },
-                    predefinedPlacesDescription: {
-                      color: "#333333",
-                    },
-                    description: {
-                      fontWeight: "bold",
-                    },
-                  }}
-                />
+                    shadowOpacity: 0.2,
+                    shadowRadius: 4,
+                    overflow: "hidden",
+                    borderRadius: 18,
+                    pointerEvents: "auto",
+                  },
+                  textInputContainer: {
+                    backgroundColor: "#EEEEEE",
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                    borderRadius: 18,
+                  },
+                  textInput: {
+                    margin: 12,
+                    borderWidth: 1,
+                    paddingLeft: 20,
+                    backgroundColor: "#EEEEEE",
+                    borderColor: "#EEEEEE",
+                    shadowColor: "#9B9B9B",
+                  },
+                  predefinedPlacesDescription: {
+                    color: "#333333",
+                  },
+                  description: {
+                    fontWeight: "bold",
+                  },
+                }}
+              />
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={{ zIndex: 0 }}
+                  onPress={() => onPress()}
+                  underlayColor="transparent"
+                  activeOpacity={1}
+                >
+                  <LinearGradient
+                    colors={["#0C6EB1", "#22C49D"]}
+                    start={[0, 0]}
+                    end={[1, 0]}
+                    style={styles.button}
+                  >
+                    <Text style={styles.text}>Set Route</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ zIndex: 0 }}
+                  onPress={() => startRun()}
+                  underlayColor="transparent"
+                  activeOpacity={1}
+                >
+                  <LinearGradient
+                    colors={["#0C6EB1", "#22C49D"]}
+                    start={[0, 0]}
+                    end={[1, 0]}
+                    style={styles.button}
+                  >
+                    <Text style={styles.text}>Start</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={{ zIndex: 0 }}
-                onPress={() => onPress()}
-                underlayColor="transparent"
-                activeOpacity={1}
-              >
-                <LinearGradient
-                  colors={["#0C6EB1", "#22C49D"]}
-                  start={[0, 0]}
-                  end={[1, 0]}
-                  style={styles.button}
-                >
-                  <Text style={styles.text}>Set Route</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ zIndex: 0 }}
-                onPress={() => startRun()}
-                underlayColor="transparent"
-                activeOpacity={1}
-              >
-                <LinearGradient
-                  colors={["#0C6EB1", "#22C49D"]}
-                  start={[0, 0]}
-                  end={[1, 0]}
-                  style={styles.button}
-                >
-                  <Text style={styles.text}>Start</Text>
-                </LinearGradient>
-              </TouchableOpacity>
             </View>
           )}
         </View>
@@ -416,13 +422,12 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  autocompleteContainer: {
-    height: 420,
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 16,
-    backgroundColor: "white",
-    paddingBottom: 40,
-    paddingTop: 40,
-    position: "relative",
+    marginTop: 40,
   },
   button: {
     alignItems: "center",
@@ -440,5 +445,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+    gap: 20,
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "white",
+  },
+  autocompleteContainer: {
+    height: 200,
+    paddingHorizontal: 32,
   },
 });
