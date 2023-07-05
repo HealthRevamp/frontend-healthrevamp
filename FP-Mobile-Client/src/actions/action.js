@@ -91,6 +91,51 @@ export const doRegister = (
   };
 };
 
+export const doUpdate = (
+  username,
+  email,
+  password,
+  height,
+  weight,
+  gender,
+  move,
+  AlertSuccess,
+  AlertFailed
+) => {
+  return async (dispatch) => {
+    try {
+      dispatch(fetchDataStart());
+      const access_token = await AsyncStorage.getItem("access_token");
+      const response = await fetch(`${BASE_URL}/users/update`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          access_token: access_token,
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          height,
+          weight,
+          gender,
+        }),
+      });
+      dispatch(fetchDataSuccess());
+
+      if (response.ok) {
+        AlertSuccess();
+        move();
+      } else {
+        AlertFailed();
+      }
+    } catch (error) {
+      dispatch(fetchDataFailure(error));
+      AlertFailed();
+    }
+  };
+};
+
 export const doSearch = (dataInput, token) => {
   return async (dispatch) => {
     try {
@@ -260,7 +305,7 @@ export const updateSubs = (data) => {
         },
         body: JSON.stringify({ endSub: data }),
       });
-      console.log(response)
+      console.log(response);
       if (response.ok) {
         dispatch(fetchDataSuccess());
       }

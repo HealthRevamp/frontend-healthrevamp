@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ActivityIndicator
 } from "react-native";
 import { BASE_URL } from "../config/base-API";
 import { LinearGradient } from "expo-linear-gradient";
@@ -72,23 +73,14 @@ const PaymentScreen = () => {
         },
       });
       console.log("Success from promise", paymentIntent);
-      // dispatch(fetchDataStart());
-      const response = await fetch(`${BASE_URL}/users/updateSub`, {
-        method: "PATCH",
+      dispatch(updateSubs(90));
+      const response = await fetch(`${BASE_URL}/api/mail`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           access_token: access_token,
         },
-        body: JSON.stringify({ endSub: 90 }),
       });
-      console.log(response);
-      // const response = await fetch(`${BASE_URL}/api/mail`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     access_token: access_token,
-      //   },
-      // });
       if (response.ok) {
         Alert.alert("Succesfully Payment");
       } else {
@@ -102,45 +94,94 @@ const PaymentScreen = () => {
   }, [card, fetchPaymentIntentClientSecret, dispatch]);
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text
-        style={{
-          margin: 20,
-          textAlign: "center",
-          fontSize: 30,
-          fontWeight: "bold",
-        }}
-      >
-        Subscribe for 3 Month
-      </Text>
-      <CardForm
-        cardStyle={{
-          backgroundColor: "#FFFFFF",
-        }}
-        style={{
-          width: "100%",
-          height: 300,
-        }}
-        onFormComplete={(cardDetails) => {
-          console.log(cardDetails);
-          setCard(cardDetails);
-        }}
-      />
-      {/* <Button onPress={handlePayPress} title="Pay"  /> */}
-      <View style={{ padding: 20.0 }}>
+    <>
+      {loadingPayment && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" />
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
+            }}
+          >
+            Patience is part of health
+          </Text>
+        </View>
+      )}
+      <View>
         <LinearGradient
-          colors={["#0C6EB1", "#22C49D"]}
+         colors={["#0C6EB1", "#22C49D"]}
           start={[0, 0]}
           end={[1, 0]}
-          style={styles.button}
-          onPress={handlePayPress}
+          style={{paddingVertical: 20}}
         >
-          <TouchableOpacity onPress={handlePayPress} disabled={loading}>
-            <Text style={styles.text}>Pay</Text>
-          </TouchableOpacity>
+          <Text
+            style={{
+              marginTop: 30,
+              textAlign: "center",
+              fontSize: 18,
+              fontWeight: "bold",
+              color: '#fff'
+            }}
+          >
+            Subscribe for 3 Month
+          </Text>
+          <Text
+            style={{
+              textAlign: "center",
+              fontSize: 30,
+              fontWeight: "bold",
+              color: '#fff'
+            }}
+          >
+            Rp 100.000
+          </Text>
         </LinearGradient>
       </View>
-    </View>
+      <View style={{ padding: 20 }}>
+        <CardForm
+          cardStyle={{
+            backgroundColor: "#FFFFFF",
+          }}
+          style={{
+            width: "100%",
+            height: 300,
+          }}
+          onFormComplete={(cardDetails) => {
+            console.log(cardDetails);
+            setCard(cardDetails);
+          }}
+        />
+        {/* <Button onPress={handlePayPress} title="Pay"  /> */}
+        <View style={{ padding: 20.0 }}>
+          <LinearGradient
+            colors={["#0C6EB1", "#22C49D"]}
+            start={[0, 0]}
+            end={[1, 0]}
+            style={styles.button}
+            onPress={handlePayPress}
+          >
+            <TouchableOpacity onPress={handlePayPress} disabled={loading}>
+              <Text style={styles.text}>Pay</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </View>
+      </View>
+    </>
   );
 };
 

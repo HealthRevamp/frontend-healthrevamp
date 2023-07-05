@@ -60,33 +60,6 @@ export default function Profile() {
 
   return (
     <>
-      {/* {loading && (
-        <View
-          style={{
-            position: "absolute",
-            zIndex: 1,
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            backgroundColor: "black",
-            height: "100%",
-            opacity: 0.8,
-          }}
-        >
-          <ActivityIndicator size="large" />
-          <Text
-            style={{
-              textAlign: "center",
-              color: "#fff",
-              fontWeight: "bold",
-              fontSize: 20,
-            }}
-          >
-            Patience is part of health
-          </Text>
-        </View>
-      )} */}
       <ScrollView
         style={{ height: "100%", flex: 1, backgroundColor: "#1E87CE" }}
       >
@@ -101,26 +74,35 @@ export default function Profile() {
           <Text
             style={{
               marginTop: 30,
-              marginLeft: 20,
+              // marginLeft: 20,
               fontSize: 30,
               fontWeight: "bold",
               // letterSpacing: 0.25,
               color: "#606060",
+              textAlign: "center",
             }}
           >
             My Profile
           </Text>
-          <Text
+
+          <View
             style={{
-              marginLeft: 20,
+              // marginLeft: 20,
+              marginTop: 20,
+              width: "100%",
+              justifyContent: "center",
+              flexDirection: "row",
             }}
           >
-            Please complate your profile
-          </Text>
-
-          <View style={{ marginLeft: 20, marginTop: 20 }}>
             <Image
-              style={{ width: 100, height: 100, borderRadius: 10 }}
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 50,
+                borderColor: "#1E87CE",
+                borderWidth: 2,
+                resizeMode: "contain",
+              }}
               source={require("../../assets/challange.png")}
             ></Image>
           </View>
@@ -132,32 +114,58 @@ export default function Profile() {
               marginBottom: 20,
               flexDirection: "row",
               flexWrap: "wrap",
-              gap: 40
+              gap: 20,
             }}
           >
             <View style={{ marginLeft: 7, borderRadius: 10 }}>
-              <TouchableOpacity
-                onPress={() => {
-                  navigate("Update Profile");
-                }}
-                underlayColor="transparent"
-                activeOpacity={1}
+              <LinearGradient
+                colors={["#0C6EB1", "#22C49D"]}
+                start={[0, 0]}
+                end={[1, 0]}
+                style={styles.button}
               >
-                <Ionicons style={{textAlign: 'center'}} name="create-outline" size={40} color={"#606060"} />
-                <Text>Update Profile</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigate("Update Profile");
+                  }}
+                  underlayColor="transparent"
+                  activeOpacity={1}
+                  style={{ flexDirection: "row" }}
+                >
+                  <Ionicons
+                    style={{ textAlign: "center" }}
+                    name="create-outline"
+                    size={20}
+                    color={"#fff"}
+                  />
+                  <Text style={{ color: "#fff" }}>Update Profile</Text>
+                </TouchableOpacity>
+              </LinearGradient>
             </View>
             <View style={{ marginLeft: 7 }}>
-              <TouchableOpacity
-                onPress={() => {
-                  navigate('Payment')
-                }}
-                underlayColor="transparent"
-                activeOpacity={1}
+              <LinearGradient
+                colors={["#0C6EB1", "#22C49D"]}
+                start={[0, 0]}
+                end={[1, 0]}
+                style={styles.button}
               >
-                <Ionicons style={{textAlign: 'center'}} name="card-outline" size={40} color={"#606060"} />
-                <Text>Payment</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigate("Payment");
+                  }}
+                  underlayColor="transparent"
+                  activeOpacity={1}
+                  style={{ flexDirection: "row", gap: 10 }}
+                >
+                  <Ionicons
+                    style={{ textAlign: "center" }}
+                    name="card-outline"
+                    size={20}
+                    color={"#fff"}
+                  />
+                  <Text style={{ color: "#fff" }}>Payment</Text>
+                </TouchableOpacity>
+              </LinearGradient>
             </View>
           </View>
 
@@ -253,7 +261,7 @@ const styles = StyleSheet.create({
     padding: 3,
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 20
+    gap: 20,
   },
   input: {
     height: 50,
