@@ -60,7 +60,6 @@ export default function Habbits() {
       const value = await AsyncStorage.getItem("access_token");
       if (value !== null) {
         dispatch(getAllHabbits(value));
-        // console.log(value, '<<<<< ini token');
       }
     } catch (error) {
       console.log(error);
@@ -80,17 +79,14 @@ export default function Habbits() {
   };
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-
-  const move = () => {
-    setDisplayAddHabbits("none");
-  };
+  
   const handleAddHabbits = async () => {
     storeDataAdd();
   };
   const storeDataAdd = async () => {
     try {
       const move = () => {
-        navigate("Habbit");
+        setDisplayAddHabbits("none");
       };
       const AlertSuccess = () => {
         Alert.alert("Success", "Add successful!");
@@ -151,11 +147,13 @@ export default function Habbits() {
     },
   ];
 
-  const delData = async (id) => {
+  const delData = async (id, AlertSuccess, AlertFailed) => {
     try {
       const value = await AsyncStorage.getItem("access_token");
       if (value !== null) {
-        dispatch(delHabbits({ value, id, storeData }));
+        dispatch(
+          delHabbits({ value, id, storeData, AlertSuccess, AlertFailed })
+        );
       }
     } catch (error) {
       console.log(error);
@@ -163,7 +161,13 @@ export default function Habbits() {
   };
 
   const longPress = (id) => {
-    delData(id);
+    const AlertFailed = () => {
+      Alert.alert("Failed to delete!");
+    };
+    const AlertSuccess = () => {
+      Alert.alert("Successfully deleted");
+    };
+    delData(id, AlertSuccess, AlertFailed);
   };
 
   function formatDate(date) {
@@ -201,7 +205,7 @@ export default function Habbits() {
               fontSize: 30,
             }}
           >
-            Add your habbit
+            Add your habit
           </Text>
           <View
             style={{
@@ -213,13 +217,40 @@ export default function Habbits() {
             }}
           >
             <View style={styles.containerForm}>
+              <Text
+                style={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: 17,
+                  marginLeft: 12,
+                }}
+              >
+                Your habit
+              </Text>
               <TextInput
-                placeholder="Your habbits"
+                // placeholder="Your habbits"
                 value={name}
                 onChangeText={setName}
                 style={styles.input}
               />
-              <View style={{ paddingHorizontal: 20 }}>
+              <Text
+                style={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: 17,
+                  marginLeft: 12,
+                  marginTop: 5,
+                }}
+              >
+                Your description{" "}
+              </Text>
+              <TextInput
+                // placeholder="Your description"
+                value={description}
+                onChangeText={setDescription}
+                style={styles.input}
+              />
+              <View style={{ marginTop: 10 }}>
                 {textTime && (
                   <Text
                     style={{
@@ -244,7 +275,7 @@ export default function Habbits() {
                     colors={["#0C6EB1", "#22C49D"]}
                     start={[0, 0]}
                     end={[1, 0]}
-                    style={styles.button}
+                    style={styles.buttonSetTime}
                   >
                     <Text style={styles.text}>Set Time</Text>
                   </LinearGradient>
@@ -260,12 +291,6 @@ export default function Habbits() {
                   />
                 )}
               </View>
-              <TextInput
-                placeholder="Your description"
-                value={description}
-                onChangeText={setDescription}
-                style={styles.input}
-              />
             </View>
           </View>
           <View
@@ -305,12 +330,12 @@ export default function Habbits() {
               name="add-circle-outline"
               style={{
                 textAlign: "center",
-                fontSize: 30,
+                fontSize: 24,
                 color: "#fff",
                 fontWeight: "bold",
               }}
             />
-            <Text style={styles.buttonText}>Add your Habbits</Text>
+            <Text style={styles.buttonText}>Add your habit</Text>
           </LinearGradient>
         </TouchableOpacity>
         <View style={{ padding: 2 }}>
@@ -346,10 +371,10 @@ export default function Habbits() {
                   <View>
                     <Image
                       source={require("../../assets/habits-icon.png")}
-                      style={{ width: 75, height: 75 }}
+                      style={{ width: 70, height: 70 }}
                     />
                   </View>
-                  <View key={i} style={{ marginLeft: 10, marginTop: 6 }}>
+                  <View key={i} style={{ marginLeft: 10, marginTop: 4 }}>
                     <Text
                       style={{
                         fontSize: 24,
@@ -374,7 +399,7 @@ export default function Habbits() {
 const styles = StyleSheet.create({
   buttonAdd: {
     backgroundColor: "#2196F3",
-    padding: 15,
+    padding: 10,
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
@@ -395,9 +420,10 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     borderWidth: 1,
-    padding: 10,
+    paddingLeft: 15,
     marginBottom: 15,
     marginTop: 15,
+    paddingLeft: 15,
     borderRadius: 18,
     backgroundColor: "#EEEEEE",
     borderColor: "#EEEEEE",
@@ -409,6 +435,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
+    borderRadius: 18,
+    elevation: 3,
+    backgroundColor: "#0C6EB1",
+  },
+  buttonSetTime: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
     borderRadius: 18,
     elevation: 3,
     backgroundColor: "#0C6EB1",

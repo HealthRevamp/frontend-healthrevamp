@@ -10,9 +10,11 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  ActivityIndicator
 } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-
+import { LinearGradient } from "expo-linear-gradient";
+import { selectData, selectLoading, selectError } from "../slice/selector";
 const screen = Dimensions.get("window");
 
 const formatNumber = (num) => (num < 10 ? `0${num}` : `${num}`);
@@ -35,6 +37,7 @@ const getRemainingSecs = (secs) => {
 let totalSecs = 0;
 export default function ChallengeStart({ route }) {
   const [remainingHours, setRemainingHours] = useState(0);
+  const loading = useSelector(selectLoading);
   const [remainingMins, setRemainingMins] = useState(0);
   const [remainingSecs, setRemainingSecs] = useState(0);
   const [inputHours, setInputHours] = useState("");
@@ -63,7 +66,9 @@ export default function ChallengeStart({ route }) {
     setRemainingSecs(inputSecs);
     setIsActive(false);
     console.log(activity.id, "<<<<< id");
-    dispatch(createActivityLog({ timeElapsed: totalSecs, idActivity: activity.id }));
+    dispatch(
+      createActivityLog({ timeElapsed: totalSecs, idActivity: activity.id })
+    );
     totalSecs = 0;
   };
 
@@ -126,27 +131,67 @@ export default function ChallengeStart({ route }) {
 
   return (
     <>
-      <ScrollView>
-        <View style={{ flex: 1, padding: 10 }}>
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" />
           <Text
             style={{
-              fontSize: 35,
-              fontWeight: "bold",
               textAlign: "center",
-              textTransform: "capitalize",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
             }}
           >
-            {activity.activity}
+            Patience is part of health
           </Text>
+        </View>
+      )}
+      <ScrollView>
+        <View>
+          <LinearGradient
+            colors={["#0C6EB1", "#22C49D"]}
+            start={[0, 0]}
+            end={[1, 0]}
+            style={{ paddingVertical: 20 }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 30,
+                fontWeight: "bold",
+                color: "#fff",
+                textTransform: "capitalize",
+              }}
+            >
+              {activity.activity}
+            </Text>
+          </LinearGradient>
+        </View>
+        <View style={{ flex: 1, padding: 10 }}>
           <Text
             style={{
               marginLeft: 15,
               fontSize: 20,
               fontWeight: "500",
               marginTop: 20,
+              borderLeftColor: "#1E87CE",
+              borderLeftWidth: 3,
+              paddingLeft: 10,
             }}
           >
-            Challenges:
+            Challenge
           </Text>
           <Text style={{ marginLeft: 15, fontSize: 16 }}>
             {activity.description}

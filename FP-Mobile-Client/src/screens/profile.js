@@ -78,7 +78,7 @@ export default function Profile() {
               fontSize: 30,
               fontWeight: "bold",
               // letterSpacing: 0.25,
-              color: "#606060",
+              color: "#000",
               textAlign: "center",
             }}
           >
@@ -103,21 +103,21 @@ export default function Profile() {
                 borderWidth: 2,
                 resizeMode: "contain",
               }}
-              source={require("../../assets/challange.png")}
+              source={require("../../assets/goodview.png")}
             ></Image>
           </View>
-
+          <Text style={{fontSize: 24, textAlign: 'center', fontWeight: 'bold'}}>{dataUser?.username}</Text>
           <View
             style={{
-              marginLeft: 20,
               marginTop: 10,
               marginBottom: 20,
               flexDirection: "row",
               flexWrap: "wrap",
               gap: 20,
+              paddingHorizontal: 20,
             }}
           >
-            <View style={{ marginLeft: 7, borderRadius: 10 }}>
+            <View style={{ flex: 1 }}>
               <LinearGradient
                 colors={["#0C6EB1", "#22C49D"]}
                 start={[0, 0]}
@@ -142,7 +142,7 @@ export default function Profile() {
                 </TouchableOpacity>
               </LinearGradient>
             </View>
-            <View style={{ marginLeft: 7 }}>
+            <View style={{ flex: 1 }}>
               <LinearGradient
                 colors={["#0C6EB1", "#22C49D"]}
                 start={[0, 0]}
@@ -170,84 +170,47 @@ export default function Profile() {
           </View>
 
           <View style={styles.containerForm}>
-            <View>
+            <View style={{flex: 1}}>
               <Text
                 style={{
                   marginLeft: 17,
                   fontSize: 16,
-                  color: "#606060",
+                  color: "#000",
                   marginTop: 12,
-                }}
-              >
-                Name
-              </Text>
-              <TextInput
-                placeholder={dataUser?.username}
-                // placeholder="edit your name"
-                value={username}
-                onChangeText={setUsername}
-                style={styles.input}
-                editable={false}
-              />
-            </View>
-            <View>
-              <Text
-                style={{
-                  marginLeft: 17,
-                  fontSize: 16,
-                  color: "#606060",
-                  marginTop: 12,
+                  textAlign: 'center'
                 }}
               >
                 Total Calorie
               </Text>
-              <TextInput
-                //   placeholder={dataUser?.totalCalorie}
-                placeholder={`${dataUser?.totalCalorie}`}
-                onChangeText={setEmail}
-                style={styles.input}
-                editable={false}
-              />
+              <Text style={styles.input}>{dataUser?.totalCalorie}</Text>
             </View>
-            <View>
+            <View style={{flex: 1}}>
               <Text
                 style={{
                   marginLeft: 17,
                   fontSize: 16,
-                  color: "#606060",
+                  color: "#000",
                   marginTop: 12,
+                  textAlign: 'center'
                 }}
               >
                 Height
               </Text>
-              <TextInput
-                placeholder="170"
-                // placeholder="type your height"
-                value={dataUser?.height}
-                onChangeText={setHeight}
-                style={styles.input}
-                editable={false}
-              />
+              <Text style={styles.input}>{dataUser?.height}</Text>
             </View>
-            <View>
+            <View style={{flex: 1}}>
               <Text
                 style={{
                   marginLeft: 17,
                   fontSize: 16,
-                  color: "#606060",
+                  color: "#000",
                   marginTop: 12,
+                  textAlign: 'center'
                 }}
               >
-                Width
+                Weight
               </Text>
-              <TextInput
-                placeholder="60"
-                // placeholder="type your width"
-                value={dataUser?.width}
-                onChangeText={setWidth}
-                style={styles.input}
-                editable={false}
-              />
+              <Text style={styles.input}>{dataUser?.weight}</Text>
             </View>
           </View>
         </View>
@@ -264,13 +227,12 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   input: {
-    height: 50,
     marginHorizontal: 12,
     paddingLeft: 10,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    borderColor: "#EEEEEE",
-    shadowColor: "#9B9B9B",
+    textAlign: 'center',
+    color: '#000'
   },
   button: {
     alignItems: "center",

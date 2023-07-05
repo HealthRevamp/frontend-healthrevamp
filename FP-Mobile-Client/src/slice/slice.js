@@ -11,8 +11,10 @@ export const getAllHabbits = createAsyncThunk(
         access_token: token,
       },
     });
-    const responseJson = await response.json();
-    return responseJson;
+    if(response.ok){
+      const responseJson = await response.json();
+      return responseJson;
+    }
   }
 );
 
@@ -39,7 +41,8 @@ export const addHabbits = createAsyncThunk(
     const responseJson = await response.json();
     if (response.ok) {
       AlertSuccess();
-      storeData();
+      await storeData();
+      move()
     } else {
       AlertFailed();
       console.log(responseJson);
@@ -50,7 +53,7 @@ export const addHabbits = createAsyncThunk(
 
 export const delHabbits = createAsyncThunk(
   "Habbits/deleteHabbit",
-  async ({ value, id, storeData }) => {
+  async ({ value, id, storeData, AlertSuccess, AlertFailed }) => {
     const idReq = id;
     const response = await fetch(`${BASE_URL}/habits/${idReq}`, {
       method: "DELETE",
@@ -60,7 +63,12 @@ export const delHabbits = createAsyncThunk(
       },
     });
 
-    storeData();
+    if(response.ok){
+      AlertSuccess()
+      storeData();
+    }else {
+      AlertFailed()
+    }
   }
 );
 
