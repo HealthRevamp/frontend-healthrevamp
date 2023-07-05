@@ -18,7 +18,7 @@ export default function PaymentStack() {
         headerTitleStyle: {
           fontWeight: "bold",
         },
-        headerShown: false,
+        headerShown: false
       }}
     >
       <Stack.Screen
@@ -26,7 +26,6 @@ export default function PaymentStack() {
         component={Payment}
         options={{
           title: "Payment",
-          headerShown: false,
         }}
       />
       <Stack.Screen name="Subscribe3Month" component={Subscribe3Month} />

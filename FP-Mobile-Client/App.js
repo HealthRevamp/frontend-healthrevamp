@@ -23,12 +23,18 @@ export default function App() {
                 },
                 headerTitleAlign: "center",
                 headerTitleStyle: {
-                  color: "#fff",
+                  color: "#1E87CE",
                   fontWeight: "bold",
                 },
               }}
             >
-              <Stack.Screen name="Login" component={MainStack} />
+              <Stack.Screen
+                name="Login"
+                component={MainStack}
+                options={{
+                  headerShown: false,
+                }}
+              />
               <Stack.Screen
                 name="Dashboard"
                 component={bottomNav}

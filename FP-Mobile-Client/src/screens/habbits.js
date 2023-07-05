@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Button,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -21,12 +22,36 @@ import { getAllHabbits } from "../slice/slice";
 import { addHabbits } from "../slice/slice";
 import { delHabbits } from "../slice/slice";
 import { LongPressGestureHandler, State } from "react-native-gesture-handler";
-
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+import Ionicons from "@expo/vector-icons/Ionicons";
 export default function Habbits() {
   const { navigate } = useNavigation();
   const dispatch = useDispatch();
   const [displayAddHabbits, setDisplayAddHabbits] = useState("none");
+  // Date
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [textTime, setText] = useState();
 
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+    let fTime = tempDate.getHours() + ":" + tempDate.getMinutes();
+    setText(fTime);
+
+    // console.log(fDate + ' (' + fTime + ')' )
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+  // Date
   const { habbitsData } = useSelector((state) => state.user);
   const data = habbitsData.habits;
 
@@ -45,6 +70,7 @@ export default function Habbits() {
   useEffect(() => {
     storeData();
   }, []);
+
   // everyting form
   const seeForm = () => {
     setDisplayAddHabbits("flex");
@@ -53,7 +79,6 @@ export default function Habbits() {
     setDisplayAddHabbits("none");
   };
   const [name, setName] = useState("");
-  const [time, setTime] = useState("");
   const [description, setDescription] = useState("");
 
   const move = () => {
@@ -80,11 +105,12 @@ export default function Habbits() {
           addHabbits({
             value,
             name,
-            time,
+            textTime,
             description,
             AlertSuccess,
             AlertFailed,
             move,
+            storeData,
           })
         );
       }
@@ -129,10 +155,7 @@ export default function Habbits() {
     try {
       const value = await AsyncStorage.getItem("access_token");
       if (value !== null) {
-        dispatch(delHabbits({ value, id }));
-        useEffect(() => {
-          storeData();
-        }, []);
+        dispatch(delHabbits({ value, id, storeData }));
       }
     } catch (error) {
       console.log(error);
@@ -141,10 +164,6 @@ export default function Habbits() {
 
   const longPress = (id) => {
     delData(id);
-  };
-
-  const onePress = () => {
-    alert("Hold to delete habbits");
   };
 
   return (
@@ -165,70 +184,104 @@ export default function Habbits() {
         }}
       >
         <View style={{ marginTop: 60 }}>
-          <LinearGradient
-            colors={["#0C6EB1", "#22C49D"]}
-            start={[0, 0]}
-            end={[1, 0]}
-            style={styles.buttonAdd}
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 30,
+            }}
           >
-            <Text
-              style={{
-                textAlign: "center",
-                color: "#fff",
-                fontWeight: "bold",
-                fontSize: 30,
-              }}
-            >
-              Add your habbit
-            </Text>
-            <View
-              style={{
-                width: 360,
-                paddingHorizontal: 10,
-                paddingVertical: 20,
-                marginTop: 10,
-                borderRadius: 10,
-              }}
-            >
-              <View style={styles.containerForm}>
-                <TextInput
-                  placeholder="Your habbits"
-                  value={name}
-                  onChangeText={setName}
-                  style={styles.input}
-                />
-                <TextInput
-                  placeholder="Your time"
-                  value={time}
-                  onChangeText={setTime}
-                  style={styles.input}
-                />
-                <TextInput
-                  placeholder="Your description"
-                  value={description}
-                  onChangeText={setDescription}
-                  style={styles.input}
-                />
-              </View>
-            </View>
-            <View style={{ display: "flex", flexDirection: "row" }}>
-              <TouchableOpacity onPress={handleAddHabbits}>
-                <Text style={styles.buttonText}>Add</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => hideForm()}>
-                <Text
-                  style={{
-                    marginLeft: 10,
-                    color: "#FFFFFF",
-                    fontSize: 16,
-                    fontWeight: "bold",
+            Add your habbit
+          </Text>
+          <View
+            style={{
+              width: 400,
+              paddingHorizontal: 10,
+              paddingVertical: 20,
+              marginTop: 10,
+              borderRadius: 10,
+            }}
+          >
+            <View style={styles.containerForm}>
+              <TextInput
+                placeholder="Your habbits"
+                value={name}
+                onChangeText={setName}
+                style={styles.input}
+              />
+              <View style={{ paddingHorizontal: 20 }}>
+                {textTime && (
+                  <Text
+                    style={{
+                      color: "#fff",
+                      textAlign: "center",
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      marginBottom: 10,
+                    }}
+                  >
+                    {textTime}
+                  </Text>
+                )}
+                <TouchableOpacity
+                  onPress={() => {
+                    showMode("time");
                   }}
+                  underlayColor="transparent"
+                  activeOpacity={1}
                 >
-                  Cancel
-                </Text>
-              </TouchableOpacity>
+                  <LinearGradient
+                    colors={["#0C6EB1", "#22C49D"]}
+                    start={[0, 0]}
+                    end={[1, 0]}
+                    style={styles.button}
+                  >
+                    <Text style={styles.text}>Set Time</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChangeDate}
+                  />
+                )}
+              </View>
+              <TextInput
+                placeholder="Your description"
+                value={description}
+                onChangeText={setDescription}
+                style={styles.input}
+              />
             </View>
-          </LinearGradient>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <TouchableOpacity onPress={handleAddHabbits}>
+              <Text style={styles.buttonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => hideForm()}>
+              <Text
+                style={{
+                  marginLeft: 10,
+                  color: "#FFFFFF",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       <ScrollView>
@@ -239,6 +292,15 @@ export default function Habbits() {
             end={[1, 0]}
             style={styles.buttonAdd}
           >
+            <Ionicons
+              name="add-circle-outline"
+              style={{
+                textAlign: "center",
+                fontSize: 30,
+                color: "#fff",
+                fontWeight: "bold",
+              }}
+            />
             <Text style={styles.buttonText}>Add your Habbits</Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -247,7 +309,8 @@ export default function Habbits() {
             return (
               <TouchableOpacity
                 onLongPress={() => longPress(el.id)}
-                onPress={onePress}
+                underlayColor="transparent"
+                activeOpacity={1}
               >
                 <View
                   style={{
@@ -266,13 +329,15 @@ export default function Habbits() {
                     shadowOpacity: 0.25,
                     shadowRadius: 3.84,
                     elevation: 5,
+                    alignItems: "center",
+                    flexWrap: "wrap",
                   }}
                 >
                   {/* Card content */}
                   <View>
                     <Image
                       source={require("../../assets/habits-icon.png")}
-                      style={{ width: 100, height: 100 }}
+                      style={{ width: 75, height: 75 }}
                     />
                   </View>
                   <View key={i} style={{ marginLeft: 10, marginTop: 6 }}>
@@ -284,9 +349,7 @@ export default function Habbits() {
                     >
                       {el.name}
                     </Text>
-                    <Text style={{ fontWeight: "bold", paddingTop: 10 }}>
-                      {el.time}
-                    </Text>
+                    <Text style={{}}>{el.time}</Text>
                     <Text style={{ paddingTop: 10 }}>{el.description}</Text>
                   </View>
                 </View>
@@ -302,12 +365,15 @@ export default function Habbits() {
 const styles = StyleSheet.create({
   buttonAdd: {
     backgroundColor: "#2196F3",
-    padding: 10,
+    padding: 15,
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 10,
-    marginHorizontal: 50,
+    marginTop: 40,
+    marginBottom: 20,
+    marginHorizontal: 60,
+    flexDirection: "row",
+    gap: 10,
   },
   buttonText: {
     color: "#FFFFFF",
@@ -315,19 +381,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   containerForm: {
-    padding: 20.0,
+    // padding: 20.0,
   },
   input: {
     height: 50,
-    margin: 12,
-    marginLeft: 10,
     borderWidth: 1,
     padding: 10,
-    paddingLeft: 35,
+    marginBottom: 15,
+    marginTop: 15,
     borderRadius: 18,
     backgroundColor: "#EEEEEE",
     borderColor: "#EEEEEE",
     shadowColor: "#9B9B9B",
+    width: "100%",
   },
   button: {
     alignItems: "center",

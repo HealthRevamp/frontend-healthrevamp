@@ -59,7 +59,7 @@ const PaymentScreen = () => {
   }, [card, fetchPaymentIntentClientSecret]);
 
   return (
-    <View style={{ padding: 20 }}>
+    <View style={{ padding: 20}}>
       <Text style={{margin: 20, textAlign: 'center', fontSize: 30, fontWeight: 'bold'}}>Subscribe for 3 Month</Text>
       <CardForm
         cardStyle={{

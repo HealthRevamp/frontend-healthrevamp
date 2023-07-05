@@ -21,11 +21,12 @@ export const addHabbits = createAsyncThunk(
   async ({
     value,
     name,
-    time,
+    textTime,
     description,
     AlertSuccess,
     AlertFailed,
     move,
+    storeData,
   }) => {
     const response = await fetch(`${BASE_URL}/habits`, {
       method: "POST",
@@ -33,13 +34,15 @@ export const addHabbits = createAsyncThunk(
         "Content-Type": "application/json",
         access_token: value,
       },
-      body: JSON.stringify({ name, time, description }),
+      body: JSON.stringify({ name, time: textTime, description }),
     });
     const responseJson = await response.json();
-    if (responseJson.ok) {
+    if (response.ok) {
       AlertSuccess();
+      storeData();
     } else {
       AlertFailed();
+      console.log(responseJson);
     }
     return responseJson;
   }
@@ -47,7 +50,7 @@ export const addHabbits = createAsyncThunk(
 
 export const delHabbits = createAsyncThunk(
   "Habbits/deleteHabbit",
-  async ({ value, id }) => {
+  async ({ value, id, storeData }) => {
     const idReq = id;
     const response = await fetch(`${BASE_URL}/habits/${idReq}`, {
       method: "DELETE",
@@ -56,13 +59,8 @@ export const delHabbits = createAsyncThunk(
         access_token: value,
       },
     });
-    const responseJson = await response.json();
-    if (responseJson.ok) {
-      AlertSuccess();
-    } else {
-      AlertFailed();
-    }
-    return responseJson;
+
+    storeData();
   }
 );
 
@@ -157,7 +155,7 @@ export const {
   fetchSearch,
   fetchActivities,
   fetchActivity,
-  fetchDataUser
+  fetchDataUser,
 } = actionCreator.actions;
 
 export default actionCreator.reducer;

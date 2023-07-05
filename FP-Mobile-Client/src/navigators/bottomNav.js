@@ -11,8 +11,7 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 const Tab = createBottomTabNavigator();
 import DashboardStack from "../navigators/dashboardStack";
-import UpdateProfile from "../screens/updateProfile";
-import PaymentStack from "../navigators/paymentStack";
+import Profile from "../screens/profile";
 export default function DashboardTabs() {
   return (
     <Tab.Navigator
@@ -23,7 +22,7 @@ export default function DashboardTabs() {
 
             if (route.name === "Dashboard") {
               iconName = focused ? "ios-home" : "ios-home-outline";
-            } else if (route.name === "Update Profile") {
+            } else if (route.name === "Profile") {
               iconName = focused ? "ios-person" : "ios-person-outline";
             } else if (route.name === "Payment") {
               iconName = focused ? "ios-card" : "ios-card-outline";
@@ -55,8 +54,16 @@ export default function DashboardTabs() {
           headerShown: false,
         }}
       />
-      <Tab.Screen name="Update Profile" component={UpdateProfile} />
-      <Tab.Screen name="Payment" component={PaymentStack} />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerShown: true,
+          headerTitleStyle: {
+            color: "#1E87CE",
+          },
+        }}
+      />
     </Tab.Navigator>
   );
 }

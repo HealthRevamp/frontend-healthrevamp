@@ -75,7 +75,7 @@ export default function FoodNutrition() {
           style={{
             fontSize: 24,
             fontWeight: "bold",
-            paddingTop: 20,
+            paddingTop: 40,
             paddingBottom: 20,
             paddingLeft: 16,
             paddingRight: 16,

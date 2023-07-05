@@ -41,7 +41,20 @@ export default function DashboardPage() {
   const [search, setSearch] = useState("");
   const { navigate } = useNavigation();
   const [displayRank, setDisplayRank] = useState("none");
-
+  // compare Date Expired
+  const dateUserSub = [];
+  dateUserSub.push(dataUser.endSub.split("-")[0]);
+  dateUserSub.push(dataUser.endSub.split("-")[1]);
+  dateUserSub.push(dataUser.endSub.split("-")[2].split("T")[0]);
+  console.log(dateUserSub);
+  const getDate = new Date();
+  const dateUserComp = [];
+  dateUserComp.push(getDate.getFullYear().toString());
+  dateUserComp.push(getDate.getMonth().toString());
+  dateUserComp.push(getDate.getDate().toString());
+  const compareYear = +dateUserSub[0] - +dateUserComp[0];
+  const compareMonth = +dateUserSub[1] - (+dateUserComp[1]+1);
+  const compareDate = +dateUserSub[2] - +dateUserComp[2];
   useEffect(() => {
     return async () => {};
   }, []);
@@ -51,210 +64,271 @@ export default function DashboardPage() {
   };
   return (
     <>
-      <ScrollView>
+      {compareYear === 0 && compareMonth === 0 && compareDate < 1 ? (
         <View
           style={{
-            display: displayRank,
             position: "absolute",
             zIndex: 1,
             flex: 1,
             alignItems: "center",
-            justifyContent: "flex-start",
+            justifyContent: "center",
             width: "100%",
             backgroundColor: "black",
             height: "100%",
-            opacity: 0.9,
+            opacity: 0.8,
           }}
         >
-          <View style={{ marginTop: 60 }}>
-            <Text
-              style={{
-                textAlign: "center",
-                color: "#fff",
-                fontWeight: "bold",
-                fontSize: 30,
-              }}
-            >
-              Rank
-            </Text>
-            <View
-              style={{
-                backgroundColor: "white",
-                width: 360,
-                paddingHorizontal: 10,
-                paddingVertical: 20,
-                marginTop: 10,
-                borderRadius: 10,
-              }}
-            >
-              <View
+          <TouchableOpacity onPress={() => {navigate('Payment')}}>
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
+              paddingHorizontal: 20
+            }}
+          >
+            Your account is expired. Tap this word to make a payment.
+          </Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <ScrollView style={{ marginTop: "6%" }}>
+          <View
+            style={{
+              display: displayRank,
+              position: "absolute",
+              zIndex: 1,
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "flex-start",
+              width: "100%",
+              backgroundColor: "black",
+              height: "100%",
+              opacity: 0.9,
+            }}
+          >
+            <View style={{ marginTop: 60 }}>
+              <Text
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  textAlign: "center",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: 30,
                 }}
               >
-                <Text style={{ flex: 1, color: "#000" }}>No</Text>
-                <Text style={{ flex: 1, color: "#000" }}>Name</Text>
-                <Text style={{ flex: 1, color: "#000" }}>Total Distance</Text>
-              </View>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={{ flex: 1, color: "#000" }}>1</Text>
-                <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
-                <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
-              </View>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={{ flex: 1, color: "#000" }}>1</Text>
-                <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
-                <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
-              </View>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={{ flex: 1, color: "#000" }}>1</Text>
-                <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
-                <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
-              </View>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={{ flex: 1, color: "#000" }}>1</Text>
-                <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
-                <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
+                Rank
+              </Text>
+              <View
+                style={{
+                  backgroundColor: "white",
+                  width: 360,
+                  paddingHorizontal: 10,
+                  paddingVertical: 20,
+                  marginTop: 10,
+                  borderRadius: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={{ flex: 1, color: "#000" }}>No</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>Name</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>Total Distance</Text>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ flex: 1, color: "#000" }}>1</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ flex: 1, color: "#000" }}>1</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ flex: 1, color: "#000" }}>1</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ flex: 1, color: "#000" }}>1</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
+                  <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-        <View>
-          {/* Profile */}
-          <View style={styles.containerProfile}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.textProfile}>
-                Hi, {dataUser?.username} 
-                {dataUser?.level === 1 ? <Ionicons
-                  name="medal-outline"
+          <View>
+            {/* Profile */}
+            <View style={styles.containerProfile}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.textProfile}>
+                  Hi, {dataUser?.username}
+                  {dataUser?.level === 1 ? (
+                    <Ionicons
+                      name="medal-outline"
+                      style={{
+                        textAlign: "center",
+                        fontSize: 20,
+                        color: "#fff",
+                      }}
+                    />
+                  ) : (
+                    <Ionicons
+                      name="medal-outline"
+                      style={{
+                        textAlign: "center",
+                        fontSize: 20,
+                        color: "#0C6EB1",
+                      }}
+                    />
+                  )}
+                </Text>
+                <Text style={styles.textHallo}>Let's check your activity</Text>
+                {compareYear === 0 &&
+                compareMonth <= 1 &&
+                compareDate <= 7 &&
+                compareDate > 0 ? (
+                  <Text
+                    style={{
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      marginTop: 10,
+                      fontWeight: "bold",
+                      paddingVertical: 4,
+                      paddingHorizontal: 10,
+                      borderColor: "red",
+                      borderWidth: 2,
+                    }}
+                  >
+                    Your account will be expired at {dataUser?.endSub}
+                  </Text>
+                ) : (
+                  ""
+                )}
+              </View>
+              <View style={{ marginRight: 10 }}>
+                <Image
+                  style={{
+                    width: 70,
+                    height: 70,
+                    borderRadius: 100,
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                  }}
+                  source={require("../../assets/challange.png")}
+                ></Image>
+              </View>
+            </View>
+
+            {/* give rank */}
+            <TouchableOpacity
+              onPress={() => seeRank()}
+              underlayColor="transparent"
+              activeOpacity={1}
+            >
+              <View style={styles.containerGiveRank}>
+                <Text style={styles.textGiveRank}>Check your rank</Text>
+                <Ionicons
+                  name="star-outline"
                   style={{
                     textAlign: "center",
                     fontSize: 20,
-                    color: "#0C6EB1",
+                    color: "blue",
                   }}
-                /> : <Ionicons
-                name="medal-outline"
-                style={{
-                  textAlign: "center",
-                  fontSize: 20,
-                  color: "green",
-                }}
-              />}
-              </Text>
-              <Text style={styles.textHallo}>Let's check your activity</Text>
-            </View>
-            <View style={{ marginRight: 10 }}>
-              <Image
-                style={{ width: 70, height: 70, borderRadius: 100 }}
-                source={require("../../assets/challange.png")}
-              ></Image>
-            </View>
-          </View>
+                />
+              </View>
+            </TouchableOpacity>
 
-          {/* give rank */}
-          <TouchableOpacity
-            onPress={() => seeRank()}
-            underlayColor="transparent"
-            activeOpacity={1}
-          >
-            <View style={styles.containerGiveRank}>
-              <Text style={styles.textGiveRank}>Check your rank</Text>
-              <Ionicons
-                name="star-outline"
+            {/* calories */}
+            <View style={styles.containerCalories}>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 24,
+                    paddingLeft: 20,
+                    paddingTop: 10,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Calories
+                </Text>
+              </View>
+              <View
                 style={{
-                  textAlign: "center",
-                  fontSize: 20,
-                  color: "blue",
+                  flex: 1,
+                  alignItems: "center",
+                  marginLeft: 30,
+                  marginRight: 30,
                 }}
-              />
+              >
+                <LinearGradient
+                  colors={["#0C6EB1", "#22C49D"]}
+                  start={[0, 0]}
+                  end={[1, 0]}
+                  style={styles.linearStyle}
+                >
+                  <View style={styles.textContainer}>
+                    <Text style={{ fontSize: 40, fontWeight: "bold" }}>
+                      {dataUser?.totalCalorie}
+                    </Text>
+                    <Text style={{ fontSize: 30 }}>KCL</Text>
+                  </View>
+                </LinearGradient>
+              </View>
             </View>
-          </TouchableOpacity>
 
-          {/* calories */}
-          <View style={styles.containerCalories}>
-            <View>
+            {/* Card feature */}
+            <View style={{}}>
               <Text
                 style={{
                   fontSize: 24,
-                  paddingLeft: 20,
                   paddingTop: 10,
+                  paddingBottom: 10,
+                  paddingLeft: 16,
+                  paddingRight: 16,
                   fontWeight: "bold",
                 }}
               >
-                Calories
+                Feature
               </Text>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                alignItems: "center",
-                marginLeft: 30,
-                marginRight: 30,
-              }}
-            >
-              <LinearGradient
-                colors={["#0C6EB1", "#22C49D"]}
-                start={[0, 0]}
-                end={[1, 0]}
-                style={styles.linearStyle}
-              >
-                <View style={styles.textContainer}>
-                  <Text style={{ fontSize: 40, fontWeight: "bold" }}>
-                    {dataUser?.totalCalorie}
-                  </Text>
-                  <Text style={{ fontSize: 30 }}>KCL</Text>
-                </View>
-              </LinearGradient>
-            </View>
-          </View>
-
-          {/* Card feature */}
-          <View style={{}}>
-            <Text
-              style={{
-                fontSize: 24,
-                paddingTop: 10,
-                paddingBottom: 10,
-                paddingLeft: 16,
-                paddingRight: 16,
-                fontWeight: "bold",
-              }}
-            >
-              Feature
-            </Text>
-            <View style={styles.container}>
-              {subjects.map((subject, i) => {
-                return (
-                  <View
-                    key={subject.id}
-                    style={[
-                      styles.cardContainer,
-                      {
-                        marginTop: cardGap,
-                        marginLeft: i % 2 !== 0 ? cardGap : 0,
-                        width: cardWidth,
-                      },
-                    ]}
-                  >
-                    <TouchableOpacity
-                      style={styles.card}
-                      onPress={() => navigate(subject.navigate)}
+              <View style={styles.container}>
+                {subjects.map((subject, i) => {
+                  return (
+                    <View
+                      key={subject.id}
+                      style={[
+                        styles.cardContainer,
+                        {
+                          marginTop: cardGap,
+                          marginLeft: i % 2 !== 0 ? cardGap : 0,
+                          width: cardWidth,
+                        },
+                      ]}
                     >
-                      <Image
-                        key={i}
-                        source={subject.image}
-                        style={{ width: 60, height: 60 }}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
+                      <TouchableOpacity
+                        style={styles.card}
+                        onPress={() => navigate(subject.navigate)}
+                      >
+                        <Image
+                          key={i}
+                          source={subject.image}
+                          style={{ width: 60, height: 60 }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })}
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </>
   );
 }
@@ -308,18 +382,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
-    marginLeft: 30,
-    marginRight: 30,
-    margin: 20,
+    paddingLeft: 30,
+    paddingRight: 30,
+    padding: 20,
     flex: 1,
+    backgroundColor: "#1E87CE",
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    marginBottom: 10,
+    gap: 20,
   },
   textProfile: {
-    color: "#606060",
+    color: "#fff",
     fontWeight: "800",
     fontSize: 24,
   },
   textHallo: {
-    color: "#0C6EB1",
+    color: "#fff",
     lineHeight: 25,
     fontWeight: 500,
     fontSize: 20,

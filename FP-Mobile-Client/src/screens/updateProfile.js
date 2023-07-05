@@ -14,7 +14,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { doRegister } from "../actions/action";
-import { selectData, selectLoading, selectError } from "../slice/selector";
+import { selectData, selectLoading, selectError} from "../slice/selector";
 import { useSelector, useDispatch } from "react-redux";
 export default function Register() {
   const { navigate } = useNavigation();
