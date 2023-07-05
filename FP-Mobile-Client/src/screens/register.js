@@ -16,13 +16,15 @@ import { useNavigation } from "@react-navigation/native";
 import { doRegister } from "../actions/action";
 import { selectData, selectLoading, selectError } from "../slice/selector";
 import { useSelector, useDispatch } from "react-redux";
+import SelectDropdown from "react-native-select-dropdown";
 export default function Register() {
   const { navigate } = useNavigation();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [gender, setGender] = useState("");
   const [height, setHeight] = useState("");
-  const [width, setWidth] = useState("");
+  const [weight, setWeight] = useState("");
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
 
@@ -42,7 +44,8 @@ export default function Register() {
         email,
         password,
         height,
-        width,
+        weight,
+        gender,
         move,
         AlertSuccess,
         AlertFailed
@@ -50,6 +53,11 @@ export default function Register() {
     );
   };
 
+  const handleInputGender = (value) => {
+    setGender(value);
+  };
+
+  console.log(gender)
   return (
     <>
       {loading && (
@@ -85,7 +93,7 @@ export default function Register() {
             height: "100%",
             justifyContent: "center",
             backgroundColor: "#fff",
-            paddingTop: 40,
+            paddingTop: 0,
           }}
         >
           {/* Title */}
@@ -97,11 +105,14 @@ export default function Register() {
                   paddingRight: 50,
                   display: "flex",
                   flexDirection: "row",
+                  width: "100%",
+                  height: 220,
+                  justifyContent: "center",
                 }}
               >
                 <Image
                   source={require("../../assets/logo.png")}
-                  style={{ width: "100%", height: 80, resizeMode: "contain" }}
+                  style={{ width: 300, height: 300, resizeMode: "contain" }}
                 />
               </View>
             </View>
@@ -139,6 +150,15 @@ export default function Register() {
               secureTextEntry
               style={styles.input}
             />
+            <SelectDropdown
+              data={["Male", "Female"]}
+              defaultValue="Choose Gender"
+              onSelect={(selectedItem) => handleInputGender(selectedItem)}
+              buttonStyle={styles.inputDropdown}
+              buttonTextStyle={styles.inputText}
+              dropdownStyle={styles.dropdown}
+              rowStyle={styles.dropdownRow}
+            />
             <TextInput
               placeholder="type your height"
               value={height}
@@ -146,9 +166,9 @@ export default function Register() {
               style={styles.input}
             />
             <TextInput
-              placeholder="type your width"
-              value={width}
-              onChangeText={setWidth}
+              placeholder="type your weight"
+              value={weight}
+              onChangeText={setWeight}
               style={styles.input}
             />
             <TouchableOpacity
@@ -220,5 +240,40 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+  },
+  inputDropdown: {
+    borderWidth: 1,
+    borderColor: "#EEEEEE",
+    borderRadius: 5,
+    width: 320,
+    height: 40,
+    marginHorizontal: 10,
+    paddingHorizontal: 10,
+    marginVertical: 15,
+    fontSize: 16,
+    color: "#000000",
+    shadowColor: "#9B9B9B",
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    overflow: "hidden",
+    borderRadius: 18,
+  },
+  inputText: {
+    fontSize: 16,
+    color: "#000000",
+  },
+  dropdown: {
+    borderColor: "#080202",
+    borderRadius: 5,
+    marginTop: 8,
+  },
+  dropdownRow: {
+    backgroundColor: "#FFFFFF",
   },
 });

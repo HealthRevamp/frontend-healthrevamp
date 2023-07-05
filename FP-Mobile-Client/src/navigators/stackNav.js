@@ -36,6 +36,9 @@ export default function MainStack() {
       <Stack.Screen
         name="RegisterPage"
         component={RegisterPage}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );

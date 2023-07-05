@@ -166,6 +166,15 @@ export default function Habbits() {
     delData(id);
   };
 
+  function formatDate(date) {
+    let day = String(date.getDate()).padStart(2, "0");
+    let month = new Intl.DateTimeFormat("en", { month: "long" }).format(date);
+    let year = date.getFullYear();
+
+    let formattedDate = month + " " + day + ", " + year;
+    return formattedDate;
+  }
+
   return (
     <>
       {/* Form */}
@@ -349,7 +358,7 @@ export default function Habbits() {
                     >
                       {el.name}
                     </Text>
-                    <Text style={{}}>{el.time}</Text>
+                    <Text style={{}}>{formatDate(new Date(el.time))}</Text>
                     <Text style={{ paddingTop: 10 }}>{el.description}</Text>
                   </View>
                 </View>

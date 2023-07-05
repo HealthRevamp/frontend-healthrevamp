@@ -8,6 +8,8 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  FlatList,
+  ActivityIndicator
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -17,7 +19,9 @@ import {
   selectLoading,
   selectError,
   selectDataUser,
+  selectDataUserRank,
 } from "../slice/selector";
+import { getUserRank } from "../actions/action";
 const subjects = [
   { id: 1, image: require("../../assets/run-icon.png"), navigate: "Run" },
   { id: 2, image: require("../../assets/habits-icon.png"), navigate: "Habbit" },
@@ -36,11 +40,28 @@ const subjects = [
 const cardGap = 16;
 
 const cardWidth = (Dimensions.get("window").width - cardGap * 3) / 2;
+function formatDate(date) {
+  let day = String(date.getDate()).padStart(2, "0");
+  let month = new Intl.DateTimeFormat("en", { month: "long" }).format(date);
+  let year = date.getFullYear();
+
+  let formattedDate = month + " " + day + ", " + year;
+  return formattedDate;
+}
+
 export default function DashboardPage() {
   const dataUser = useSelector(selectDataUser);
+  const dataUserRanking = useSelector(selectDataUserRank);
   const [search, setSearch] = useState("");
   const { navigate } = useNavigation();
   const [displayRank, setDisplayRank] = useState("none");
+  const dispatch = useDispatch();
+  const loading = useSelector(selectLoading);
+  // format Date
+  // Usage example:
+  let currentDate = new Date(dataUser?.endSub);
+  let formattedDate = formatDate(currentDate);
+  console.log(formattedDate);
   // compare Date Expired
   const dateUserSub = [];
   dateUserSub.push(dataUser.endSub.split("-")[0]);
@@ -53,17 +74,50 @@ export default function DashboardPage() {
   dateUserComp.push(getDate.getMonth().toString());
   dateUserComp.push(getDate.getDate().toString());
   const compareYear = +dateUserSub[0] - +dateUserComp[0];
-  const compareMonth = +dateUserSub[1] - (+dateUserComp[1]+1);
+  const compareMonth = +dateUserSub[1] - (+dateUserComp[1] + 1);
   const compareDate = +dateUserSub[2] - +dateUserComp[2];
   useEffect(() => {
     return async () => {};
   }, []);
 
   const seeRank = () => {
+    dispatch(getUserRank());
     setDisplayRank("flex");
   };
+
+  const closeSeeRank = () => {
+    setDisplayRank("none");
+  };
+  console.log(dataUserRanking.message);
   return (
     <>
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" />
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
+            }}
+          >
+            Patience is part of health
+          </Text>
+        </View>
+      )}
       {compareYear === 0 && compareMonth === 0 && compareDate < 1 ? (
         <View
           style={{
@@ -78,22 +132,26 @@ export default function DashboardPage() {
             opacity: 0.8,
           }}
         >
-          <TouchableOpacity onPress={() => {navigate('Payment')}}>
-          <Text
-            style={{
-              textAlign: "center",
-              color: "#fff",
-              fontWeight: "bold",
-              fontSize: 20,
-              paddingHorizontal: 20
+          <TouchableOpacity
+            onPress={() => {
+              navigate("Payment");
             }}
           >
-            Your account is expired. Tap this word to make a payment.
-          </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                color: "#fff",
+                fontWeight: "bold",
+                fontSize: 20,
+                paddingHorizontal: 20,
+              }}
+            >
+              Your account is expired. Tap this word to make a payment.
+            </Text>
           </TouchableOpacity>
         </View>
       ) : (
-        <ScrollView style={{ marginTop: "6%" }}>
+        <ScrollView style={{ marginTop: "0%" }}>
           <View
             style={{
               display: displayRank,
@@ -117,49 +175,60 @@ export default function DashboardPage() {
                   fontSize: 30,
                 }}
               >
-                Rank
+                Ranking
               </Text>
               <View
                 style={{
-                  backgroundColor: "white",
+                  // backgroundColor: "white",
                   width: 360,
-                  paddingHorizontal: 10,
-                  paddingVertical: 20,
+                  paddingVertical: 10,
                   marginTop: 10,
                   borderRadius: 10,
                 }}
               >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+                <View style={styles.containerTable}>
+                  <View style={styles.tableRow}>
+                    <Text style={[styles.tableCell, styles.headerCell]}>#</Text>
+                    <Text style={[styles.tableCell, styles.headerCell]}>
+                      Name
+                    </Text>
+                    <Text style={[styles.tableCell, styles.headerCell]}>
+                      Total Calorie
+                    </Text>
+                  </View>
+                  <FlatList
+                    data={dataUserRanking.message?.users}
+                    renderItem={({ item, index }) => {
+                      return (
+                        <View style={styles.tableRow}>
+                          <Text style={styles.tableCell}>{index + 1}</Text>
+                          <Text style={styles.tableCell}>{item?.username}</Text>
+                          <Text style={styles.tableCell}>
+                            {item?.totalCalorie}
+                          </Text>
+                        </View>
+                      );
+                    }}
+                    keyExtractor={(item) => item.id}
+                  />
+                  {/* Add more rows as needed */}
+                </View>
+                <TouchableOpacity
+                  onPress={() => closeSeeRank()}
+                  underlayColor="transparent"
+                  activeOpacity={1}
                 >
-                  <Text style={{ flex: 1, color: "#000" }}>No</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>Name</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>Total Distance</Text>
-                </View>
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={{ flex: 1, color: "#000" }}>1</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
-                </View>
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={{ flex: 1, color: "#000" }}>1</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
-                </View>
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={{ flex: 1, color: "#000" }}>1</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
-                </View>
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={{ flex: 1, color: "#000" }}>1</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>Syahrul</Text>
-                  <Text style={{ flex: 1, color: "#000" }}>42 km</Text>
-                </View>
+                  <View style={{ padding: 20.0 }}>
+                    <LinearGradient
+                      colors={["#0C6EB1", "#22C49D"]}
+                      start={[0, 0]}
+                      end={[1, 0]}
+                      style={styles.button}
+                    >
+                      <Text style={styles.text}>Close</Text>
+                    </LinearGradient>
+                  </View>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -206,7 +275,7 @@ export default function DashboardPage() {
                       borderWidth: 2,
                     }}
                   >
-                    Your account will be expired at {dataUser?.endSub}
+                    Your account will be expired at {formattedDate}
                   </Text>
                 ) : (
                   ""
@@ -384,7 +453,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingLeft: 30,
     paddingRight: 30,
-    padding: 20,
+    padding: 40,
     flex: 1,
     backgroundColor: "#1E87CE",
     borderBottomRightRadius: 20,
@@ -463,5 +532,45 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 18,
+    elevation: 3,
+    backgroundColor: "#0C6EB1",
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "white",
+  },
+  // table
+  containerTable: {
+    backgroundColor: "#fff",
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginBottom: 20,
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  tableCell: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    textAlign: "center",
+  },
+  headerCell: {
+    fontWeight: "bold",
+    backgroundColor: "#1E87CE",
+    color: "#fff",
   },
 });

@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Animated,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -80,91 +81,105 @@ export default function Login() {
           </Text>
         </View>
       )}
-      <View
+      <ScrollView
         style={{
           height: "100%",
-          justifyContent: "center",
           backgroundColor: "white",
         }}
       >
-        {/* Title */}
-        <View>
+        <View
+          style={{
+            height: "100%",
+            justifyContent: "center",
+            backgroundColor: "white",
+          }}
+        >
+          {/* Title */}
           <View>
-            <View
+            <View>
+              <View
+                style={{
+                  paddingLeft: 50,
+                  paddingRight: 50,
+                  display: "flex",
+                  flexDirection: "row",
+                  width: "100%",
+                  height: 220,
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  source={require("../../assets/logo.png")}
+                  style={{ width: 300, height: 300, resizeMode: "contain" }}
+                />
+              </View>
+            </View>
+            <Text
               style={{
-                paddingLeft: 50,
-                paddingRight: 50,
-                display: "flex",
-                flexDirection: "row",
+                color: "#0C6EB1",
+                fontWeight: "bold",
+                fontSize: 32,
+                textAlign: "center",
               }}
             >
-              <Image
-                source={require("../../assets/logo.png")}
-                style={{ width: "100%", height: 80, resizeMode: "contain" }}
+              Login
+            </Text>
+          </View>
+          {/* Form */}
+          <KeyboardAvoidingView behavior="padding" enabled>
+            <View style={styles.containerForm}>
+              <TextInput
+                placeholder="type your email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                style={styles.input}
               />
-            </View>
-          </View>
-          <Text
-            style={{
-              color: "#0C6EB1",
-              fontWeight: "bold",
-              fontSize: 32,
-              textAlign: "center",
-            }}
-          >
-            Login
-          </Text>
-        </View>
-        {/* Form */}
-        <KeyboardAvoidingView behavior="padding" enabled>
-          <View style={styles.containerForm}>
-            <TextInput
-              placeholder="type your email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              style={styles.input}
-            />
-            <TextInput
-              placeholder="type your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              style={styles.input}
-            />
-            <TouchableOpacity
-              onPress={onClickLogin}
-              underlayColor="transparent"
-              activeOpacity={1}
-            >
-              <View style={{ padding: 20.0 }}>
-                <LinearGradient
-                  colors={["#0C6EB1", "#22C49D"]}
-                  start={[0, 0]}
-                  end={[1, 0]}
-                  style={styles.button}
-                  onPress={onClickLogin}
-                >
-                  <Text style={styles.text}>Login</Text>
-                </LinearGradient>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onClickRegister}>
-              <Text
-                style={{ textAlign: "center", fontSize: 16, color: "#0C6EB1" }}
+              <TextInput
+                placeholder="type your password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+              <TouchableOpacity
+                onPress={onClickLogin}
+                underlayColor="transparent"
+                activeOpacity={1}
               >
-                Don’t have an account? sign up here
-              </Text>
-            </TouchableOpacity>
+                <View style={{ padding: 20.0 }}>
+                  <LinearGradient
+                    colors={["#0C6EB1", "#22C49D"]}
+                    start={[0, 0]}
+                    end={[1, 0]}
+                    style={styles.button}
+                    onPress={onClickLogin}
+                  >
+                    <Text style={styles.text}>Login</Text>
+                  </LinearGradient>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onClickRegister}>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 16,
+                    color: "#0C6EB1",
+                  }}
+                >
+                  Don’t have an account? sign up here
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+          <View style={{ bottom: 0, position: "relative", paddingLeft: 10 }}>
+            <Image
+              source={require("../../assets/login-regis.png")}
+              style={{ width: 210, height: 200 }}
+            />
           </View>
-        </KeyboardAvoidingView>
-        <View style={{ bottom: 0, position: "relative", paddingLeft: 10 }}>
-          <Image
-            source={require("../../assets/login-regis.png")}
-            style={{ width: 210, height: 200 }}
-          />
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 }

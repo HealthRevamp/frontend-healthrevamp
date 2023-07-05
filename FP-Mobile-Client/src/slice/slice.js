@@ -74,6 +74,7 @@ const initialState = {
   user: {},
   activities: [],
   activity: [],
+  userRank: []
 };
 
 export const actionCreator = createSlice({
@@ -107,6 +108,13 @@ export const actionCreator = createSlice({
     fetchDataUser: (state, action) => {
       state.loading = false;
       state.user = action.payload;
+    },
+    fetchDataUserRank: (state, action) => {
+      state.loading = false;
+      state.userRank = action.payload;
+    },
+    createdActivityLog: (state, action) => {
+      state.loading = false;
     },
   },
   extraReducers: {
@@ -156,6 +164,8 @@ export const {
   fetchActivities,
   fetchActivity,
   fetchDataUser,
+  fetchDataUserRank,
+  createdActivityLog
 } = actionCreator.actions;
 
 export default actionCreator.reducer;

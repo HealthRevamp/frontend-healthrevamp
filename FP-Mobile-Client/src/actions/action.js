@@ -5,7 +5,9 @@ import {
   fetchSearch,
   fetchActivities,
   fetchActivity,
-  fetchDataUser
+  fetchDataUser,
+  fetchDataUserRank,
+  createdActivityLog,
 } from "../slice/slice";
 import { BASE_URL } from "../config/base-API";
 import axios from "axios";
@@ -33,7 +35,7 @@ export const doLogin = (
       const data = await response.json();
       if (response.ok) {
         AlertSuccess();
-        dispatch(fetchDataUser(data.data))
+        dispatch(fetchDataUser(data.data));
         storeData(data.access_token);
         move();
       } else {
@@ -51,7 +53,8 @@ export const doRegister = (
   email,
   password,
   height,
-  width,
+  weight,
+  gender,
   move,
   AlertSuccess,
   AlertFailed
@@ -64,7 +67,14 @@ export const doRegister = (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password, height, width }),
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          height,
+          weight,
+          gender,
+        }),
       });
       dispatch(fetchDataSuccess());
 
@@ -161,6 +171,99 @@ export const getChallengeById = (id) => {
       console.log(data);
       dispatch(fetchDataSuccess());
       dispatch(fetchActivity(data));
+    } catch (error) {
+      dispatch(fetchDataFailure(error));
+    }
+  };
+};
+
+export const getUserRank = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(fetchDataStart());
+      const access_token = await AsyncStorage.getItem("access_token");
+      const response = await fetch(`${BASE_URL}/users/ranking`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          access_token: access_token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // console.log(data, "ini users");
+        dispatch(fetchDataSuccess());
+        dispatch(fetchDataUserRank(data));
+      } else {
+        throw new Error("Failed to fetch activities");
+      }
+    } catch (error) {
+      dispatch(fetchDataFailure(error));
+    }
+  };
+};
+
+export const createActivityLog = (data) => {
+  return async (dispatch) => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      dispatch(fetchDataStart());
+      const response = await fetch(`${BASE_URL}/activity-log/createALog`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          access_token: access_token,
+        },
+        body: JSON.stringify(data),
+      });
+      const created = await response.json();
+      dispatch(createdActivityLog(created));
+    } catch (error) {
+      dispatch(fetchDataFailure(error));
+    }
+  };
+};
+
+export const updateRun = (data) => {
+  return async (dispatch) => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      dispatch(fetchDataStart());
+      const response = await fetch(`${BASE_URL}/users/updateCal`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          access_token: access_token,
+        },
+        body: JSON.stringify({ run: data }),
+      });
+      if (response.ok) {
+        dispatch(fetchDataSuccess());
+      }
+    } catch (error) {
+      dispatch(fetchDataFailure(error));
+    }
+  };
+};
+
+export const updateSubs = (data) => {
+  return async (dispatch) => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      dispatch(fetchDataStart());
+      const response = await fetch(`${BASE_URL}/users/updateSub`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          access_token: access_token,
+        },
+        body: JSON.stringify({ endSub: data }),
+      });
+      console.log(response)
+      if (response.ok) {
+        dispatch(fetchDataSuccess());
+      }
     } catch (error) {
       dispatch(fetchDataFailure(error));
     }
