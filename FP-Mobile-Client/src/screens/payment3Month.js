@@ -1,9 +1,22 @@
 import { CardForm, useConfirmPayment } from "@stripe/stripe-react-native";
 import { useCallback, useState } from "react";
-import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { BASE_URL } from "../config/base-API";
 import { LinearGradient } from "expo-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { updateSubs } from "../actions/action";
+import { selectData, selectLoading, selectError } from "../slice/selector";
+import { useSelector, useDispatch } from "react-redux";
 const PaymentScreen = () => {
+  const loadingPayment = useSelector(selectLoading);
+  const dispatch = useDispatch();
   const [card, setCard] = useState({
     brand: "",
     complete: "",
@@ -16,23 +29,31 @@ const PaymentScreen = () => {
   const { confirmPayment, loading } = useConfirmPayment();
 
   const fetchPaymentIntentClientSecret = useCallback(async () => {
+    const access_token = await AsyncStorage.getItem("access_token");
     const response = await fetch(`${BASE_URL}/api/payment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        access_token: access_token,
       },
       body: JSON.stringify({
         currency: "sgd",
         duration: 90,
       }),
     });
-    const { clientSecret } = await response.json();
-    console.log("here");
 
-    return clientSecret;
+    if (response.ok) {
+      const { clientSecret } = await response.json();
+      console.log("here");
+
+      return clientSecret;
+    } else {
+      throw new Error("Error Payment");
+    }
   }, []);
 
   const handlePayPress = useCallback(async () => {
+    const access_token = await AsyncStorage.getItem("access_token");
     if (!card) {
       return;
     }
@@ -51,16 +72,47 @@ const PaymentScreen = () => {
         },
       });
       console.log("Success from promise", paymentIntent);
+      // dispatch(fetchDataStart());
+      const response = await fetch(`${BASE_URL}/users/updateSub`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          access_token: access_token,
+        },
+        body: JSON.stringify({ endSub: 90 }),
+      });
+      console.log(response);
+      // const response = await fetch(`${BASE_URL}/api/mail`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     access_token: access_token,
+      //   },
+      // });
+      if (response.ok) {
+        Alert.alert("Succesfully Payment");
+      } else {
+        throw new Error("failed payment");
+      }
       // ...
     } catch (e) {
       // ...
       console.log("Payment confirmation error", e);
     }
-  }, [card, fetchPaymentIntentClientSecret]);
+  }, [card, fetchPaymentIntentClientSecret, dispatch]);
 
   return (
     <View style={{ padding: 20 }}>
-      <Text style={{margin: 20, textAlign: 'center', fontSize: 30, fontWeight: 'bold'}}>Subscribe for 3 Month</Text>
+      <Text
+        style={{
+          margin: 20,
+          textAlign: "center",
+          fontSize: 30,
+          fontWeight: "bold",
+        }}
+      >
+        Subscribe for 3 Month
+      </Text>
       <CardForm
         cardStyle={{
           backgroundColor: "#FFFFFF",

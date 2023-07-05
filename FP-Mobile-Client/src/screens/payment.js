@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 const PaymentScreen = () => {
   const { navigate } = useNavigation();
   return (
-    <View style={{ padding: 20, flex: 1 }}>
+    <View style={{ padding: 20, flex: 1}}>
       <Text
         style={{
           margin: 20,

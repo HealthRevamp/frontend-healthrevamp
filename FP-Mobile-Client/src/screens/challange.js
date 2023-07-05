@@ -8,15 +8,18 @@ import {
   ScrollView,
   StyleSheet,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { selectGetActivities } from "../slice/selector";
 import { getActivities } from "../actions/action";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { selectData, selectLoading, selectError } from "../slice/selector";
 export default function ChallengeScreen() {
   const [cardPressed, setCardPressed] = useState("");
   const navigation = useNavigation();
   const activities = useSelector(selectGetActivities);
+  const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
   // console.log(activities, "<< dtaa");
 
@@ -39,6 +42,33 @@ export default function ChallengeScreen() {
 
   return (
     <>
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" />
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
+            }}
+          >
+            Patience is part of health
+          </Text>
+        </View>
+      )}
       <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
         {/* images */}
         <View>
@@ -84,7 +114,9 @@ export default function ChallengeScreen() {
                     source={require("../../assets/activity.png")}
                     style={{ width: 50, height: 50 }}
                   />
-                  <Text style={{ textTransform: "capitalize", textAlign:'center'}}>
+                  <Text
+                    style={{ textTransform: "capitalize", textAlign: "center" }}
+                  >
                     {el.activity}
                   </Text>
                 </View>
@@ -104,7 +136,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     gap: 26,
   },
   cardContainer: {

@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginPage from "../screens/login";
 import RegisterPage from "../screens/register";
-
+import WelcomeScreen from "../screens/welcomeScreen";
 const Stack = createNativeStackNavigator();
 
 export default function MainStack() {
@@ -16,9 +16,15 @@ export default function MainStack() {
         headerTitleStyle: {
           fontWeight: "bold",
         },
-        headerShown: false,
       }}
     >
+      <Stack.Screen
+        name="WelcomeScreen"
+        component={WelcomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="LoginPage"
         component={LoginPage}
@@ -30,6 +36,9 @@ export default function MainStack() {
       <Stack.Screen
         name="RegisterPage"
         component={RegisterPage}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );

@@ -5,6 +5,7 @@ import {
   Button,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from "react-native-maps";
@@ -16,7 +17,12 @@ import Geolocation from "react-native-geolocation-service";
 import * as Location from "expo-location";
 import { getDistance } from "geolib";
 import { LinearGradient } from "expo-linear-gradient";
+import { updateRun } from "../actions/action";
+import { selectData, selectLoading, selectError } from "../slice/selector";
+import { useSelector, useDispatch } from "react-redux";
 export default function Run() {
+  const loading = useSelector(selectLoading);
+  const dispatch = useDispatch();
   const mapRef = useRef(null);
   const [userLocation, setUserLocation] = useState(null);
   const [prevLocation, setPrevLocation] = useState(null);
@@ -27,6 +33,7 @@ export default function Run() {
   const [Run, setRun] = useState(false);
   const [heightRun, setHeightRun] = useState(800);
   const [seeTotalDistance, setSeeTotalDistance] = useState("none");
+  const [fixTotalDistance, setfixTotalDistance] = useState(0);
   const locationChange = (location) => {
     console.log(location);
   };
@@ -50,7 +57,7 @@ export default function Run() {
             longitude
           );
 
-          console.log(distance, totalDistance );
+          console.log(distance, totalDistance);
 
           if (distance > 0.0001) {
             setTotalDistance(totalDistance + distance);
@@ -138,13 +145,42 @@ export default function Run() {
     setHeightRun(600);
     setRun(true);
   };
-  const finishRun = () => {
+  const finishRun = async () => {
+    dispatch(updateRun(totalDistance));
     setRun(false);
     setSeeTotalDistance("flex");
+    setfixTotalDistance(totalDistance)
   };
   return (
     <>
-      <ScrollView keyboardShouldPersistTaps={'handled'}>
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            backgroundColor: "black",
+            height: "100%",
+            opacity: 0.8,
+          }}
+        >
+          <ActivityIndicator size="large" />
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 20,
+            }}
+          >
+            Patience is part of health
+          </Text>
+        </View>
+      )}
+      <ScrollView keyboardShouldPersistTaps={"handled"}>
         <View
           style={{
             display: seeTotalDistance,
@@ -179,7 +215,7 @@ export default function Run() {
                 fontSize: 20,
               }}
             >
-              {Math.ceil(totalDistance * 1000)}
+              {Math.ceil(fixTotalDistance * 1000)}
             </Text>
           </View>
         </View>
@@ -330,7 +366,6 @@ export default function Run() {
                   setPlaceIdDestination(data?.place_id);
                   console.log(data?.place_id);
                   console.log(details?.geometry);
-
                 }}
                 query={{
                   key: googleMapApi,
