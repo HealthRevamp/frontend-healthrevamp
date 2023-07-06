@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { doRegister } from "../actions/action";
+import { doUpdate } from "../actions/action";
 import {
   selectData,
   selectLoading,
@@ -34,29 +34,29 @@ export default function Profile() {
   const dispatch = useDispatch();
   const dataUser = useSelector(selectDataUser);
 
-  // const handleEdit = async () => {
-  //   const move = () => {
-  //     navigate("formedit");
-  //   };
-  //   const AlertSuccess = () => {
-  //     Alert.alert("Success", "Edit successful!");
-  //   };
-  //   const AlertFailed = () => {
-  //     Alert.alert("Edit failed!", "Check your input");
-  //   };
-  //   dispatch(
-  //     doEdit(
-  //       username,
-  //       email,
-  //       password,
-  //       height,
-  //       width,
-  //       move,
-  //       AlertSuccess,
-  //       AlertFailed
-  //     )
-  //   );
-  // };
+  const handleEdit = async () => {
+    const move = () => {
+      navigate("formedit");
+    };
+    const AlertSuccess = () => {
+      Alert.alert("Success", "Edit successful!");
+    };
+    const AlertFailed = () => {
+      Alert.alert("Edit failed!", "Check your input");
+    };
+    dispatch(
+      doUpdate(
+        username,
+        email,
+        password,
+        height,
+        width,
+        move,
+        AlertSuccess,
+        AlertFailed
+      )
+    );
+  };
 
   return (
     <>

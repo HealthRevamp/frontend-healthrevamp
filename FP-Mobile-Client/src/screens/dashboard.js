@@ -22,6 +22,7 @@ import {
   selectDataUserRank,
 } from "../slice/selector";
 import { getUserRank } from "../actions/action";
+import { doUpdate } from "../actions/action";
 const subjects = [
   { id: 1, image: require("../../assets/run-icon.png"), navigate: "Run" },
   { id: 2, image: require("../../assets/habits-icon.png"), navigate: "Habbit" },
@@ -98,6 +99,7 @@ export default function DashboardPage() {
         .then((token) => {
           console.log(token);
           //TOLONG KETIKA TOKEN DI SAVE KE DATABASE
+          dispatch(doUpdate(token))
         })
         .catch((error) => {
           console.log("Failed to get token:", error);
