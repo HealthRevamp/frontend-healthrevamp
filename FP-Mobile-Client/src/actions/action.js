@@ -270,7 +270,7 @@ export const createActivityLog = (data) => {
   };
 };
 
-export const updateRun = (data) => {
+export const updateRun = (data, AlertSuccess) => {
   return async (dispatch) => {
     try {
       const access_token = await AsyncStorage.getItem("access_token");
@@ -285,6 +285,7 @@ export const updateRun = (data) => {
       });
       if (response.ok) {
         dispatch(fetchDataSuccess());
+        AlertSuccess()
       }
     } catch (error) {
       dispatch(fetchDataFailure(error));

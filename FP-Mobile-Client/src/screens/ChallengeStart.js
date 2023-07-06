@@ -10,11 +10,14 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  ToastAndroid,
+  Alert
 } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { LinearGradient } from "expo-linear-gradient";
 import { selectData, selectLoading, selectError } from "../slice/selector";
+import { useNavigation } from "@react-navigation/native";
 const screen = Dimensions.get("window");
 
 const formatNumber = (num) => (num < 10 ? `0${num}` : `${num}`);
@@ -52,6 +55,7 @@ export default function ChallengeStart({ route }) {
   const { id } = route.params;
   const activity = useSelector(selectGetActivitiesById);
   const dispatch = useDispatch();
+  const { navigate } = useNavigation();
 
   totalSecs += 0.5;
   console.log(totalSecs);
@@ -70,6 +74,12 @@ export default function ChallengeStart({ route }) {
       createActivityLog({ timeElapsed: totalSecs, idActivity: activity.id })
     );
     totalSecs = 0;
+    navigate("Challenge");
+    ToastAndroid.show(
+      "Challenge Complete!",
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM
+    );
   };
 
   const handleInputSecs = (secs) => {
@@ -109,9 +119,20 @@ export default function ChallengeStart({ route }) {
             updatedSecs = 0;
             updatedMins = 0;
             updatedHours = 0;
+            setRemainingHours(inputHours);
+            setRemainingMins(inputMins);
+            setRemainingSecs(inputSecs);
             setIsActive(false);
+            dispatch(
+              createActivityLog({
+                timeElapsed: totalSecs,
+                idActivity: activity.id,
+              })
+            );
+            Alert.alert('Challenge Finish')
+            totalSecs = 0;
+            navigate("Challenge");
           }
-
           setRemainingHours(updatedHours);
           setRemainingMins(updatedMins);
 
@@ -186,12 +207,13 @@ export default function ChallengeStart({ route }) {
               fontSize: 20,
               fontWeight: "500",
               marginTop: 20,
+              marginBottom: 10,
               borderLeftColor: "#1E87CE",
               borderLeftWidth: 3,
               paddingLeft: 10,
             }}
           >
-            Challenge
+            Challenges
           </Text>
           <Text style={{ marginLeft: 15, fontSize: 16 }}>
             {activity.description}
@@ -240,7 +262,7 @@ export default function ChallengeStart({ route }) {
               style={[styles.button, styles.buttonReset]}
             >
               <Text style={[styles.buttonText, styles.buttonTextReset]}>
-                Reset
+                Finish
               </Text>
             </TouchableOpacity>
           )}
@@ -277,10 +299,10 @@ const styles = StyleSheet.create({
   },
   buttonReset: {
     marginTop: 20,
-    borderColor: "#E74646",
+    borderColor: "#9DB2BF",
   },
   buttonTextReset: {
-    color: "#E74646",
+    color: "#9DB2BF",
   },
   inputContainer: {
     flexDirection: "row",

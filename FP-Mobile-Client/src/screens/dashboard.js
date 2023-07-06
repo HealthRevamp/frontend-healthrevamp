@@ -305,27 +305,36 @@ export default function DashboardPage() {
               <View style={{ flex: 1 }}>
                 <Text style={styles.textProfile}>
                   Hi, {dataUser?.username}
-                  {dataUser?.level === 1 ? (
-                    <Ionicons
-                      name="medal-outline"
-                      style={{
-                        textAlign: "center",
-                        fontSize: 20,
-                        color: "#fff",
-                      }}
-                    />
-                  ) : (
-                    <Ionicons
-                      name="medal-outline"
-                      style={{
-                        textAlign: "center",
-                        fontSize: 20,
-                        color: "#0C6EB1",
-                      }}
-                    />
-                  )}
+                  <Text style={{ fontSize: 16, color: "#fff" }}>
+                    {" "}
+                    lvl.{dataUser?.level}
+                  </Text>
                 </Text>
                 <Text style={styles.textHallo}>Let's check your activity</Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    backgroundColor: "#22C49D",
+                    color: "#fff",
+                    marginTop: 10,
+                    fontWeight: "bold",
+                    paddingVertical: 4,
+                    paddingHorizontal: 10,
+                    paddingLeft: 15,
+                    borderRadius: 16,
+                    elevation: 2,
+                    shadowColor: "#969696",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 4,
+                    overflow: "hidden",
+                  }}
+                >
+                  Your account will be expired at {formattedDate}
+                </Text>
                 {compareYear === 0 &&
                 compareMonth <= 1 &&
                 compareDate <= 7 &&

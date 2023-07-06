@@ -33,7 +33,7 @@ export default function Register() {
       navigate("LoginPage");
     };
     const AlertSuccess = () => {
-      Alert.alert("Success", "Register successful!");
+      Alert.alert("Success", "Registration successful!");
     };
     const AlertFailed = () => {
       Alert.alert("Login failed!", "Check your input");

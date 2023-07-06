@@ -5,7 +5,8 @@ import {
   Button,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from "react-native-maps";
@@ -20,7 +21,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { updateRun } from "../actions/action";
 import { selectData, selectLoading, selectError } from "../slice/selector";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 export default function Run() {
+  const { navigate } = useNavigation();
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
   const mapRef = useRef(null);
@@ -146,10 +149,14 @@ export default function Run() {
     setRun(true);
   };
   const finishRun = async () => {
-    dispatch(updateRun(totalDistance));
+    // setfixTotalDistance(totalDistance)
+    const AlertSuccess = () => {
+      Alert.alert(`Your total distance ${totalDistance}`);
+    };
+    dispatch(updateRun(totalDistance, AlertSuccess));
     setRun(false);
-    setSeeTotalDistance("flex");
-    setfixTotalDistance(totalDistance)
+    navigate("Dashboard");
+    // setSeeTotalDistance("flex");
   };
   return (
     <>
@@ -188,10 +195,10 @@ export default function Run() {
             zIndex: 1,
             flex: 1,
             alignItems: "center",
-            justifyContent: "flex-start",
+            // justifyContent: "flex-start",
             width: "100%",
             backgroundColor: "black",
-            height: "100%",
+            height: 1000,
             opacity: 0.9,
           }}
         >
