@@ -11,13 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
@@ -26,7 +25,8 @@
         "googleMaps": {
           "apiKey": "AIzaSyBKvc3oQF8Ef0yLOGXbL9-hHyvLc-LVfyc"
         }
-      }
+      },
+      "package": "com.henpasin.FPMobileClient"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,6 +39,11 @@
           "enableGooglePay": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c0e094f5-3923-4621-a91b-5fb03fdcc1da"
+      }
+    }
   }
 }

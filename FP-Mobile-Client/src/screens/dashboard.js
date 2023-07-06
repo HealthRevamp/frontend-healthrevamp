@@ -50,6 +50,9 @@ function formatDate(date) {
   return formattedDate;
 }
 
+//NOTIFICATION
+import messaging from "@react-native-firebase/messaging";
+
 export default function DashboardPage() {
   const dataUser = useSelector(selectDataUser);
   const dataUserRanking = useSelector(selectDataUserRank);
@@ -77,6 +80,7 @@ export default function DashboardPage() {
   const compareYear = +dateUserSub[0] - +dateUserComp[0];
   const compareMonth = +dateUserSub[1] - (+dateUserComp[1] + 1);
   const compareDate = +dateUserSub[2] - +dateUserComp[2];
+
   //NOTIFICATION
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
@@ -99,7 +103,9 @@ export default function DashboardPage() {
         .then((token) => {
           console.log(token);
           //TOLONG KETIKA TOKEN DI SAVE KE DATABASE
+
           dispatch(doUpdate(token))
+
         })
         .catch((error) => {
           console.log("Failed to get token:", error);
