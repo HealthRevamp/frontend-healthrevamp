@@ -9,7 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -49,6 +49,9 @@ function formatDate(date) {
   return formattedDate;
 }
 
+//NOTIFICATION
+import messaging from "@react-native-firebase/messaging";
+
 export default function DashboardPage() {
   const dataUser = useSelector(selectDataUser);
   const dataUserRanking = useSelector(selectDataUserRank);
@@ -76,7 +79,75 @@ export default function DashboardPage() {
   const compareYear = +dateUserSub[0] - +dateUserComp[0];
   const compareMonth = +dateUserSub[1] - (+dateUserComp[1] + 1);
   const compareDate = +dateUserSub[2] - +dateUserComp[2];
+
+  //NOTIFICATION
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Autho status:", authStatus);
+    }
+  };
+
   useEffect(() => {
+    //NOTIFICATION
+    const getTokenAndHandleNotifications = async () => {
+      await requestUserPermission(); // Await the permission request
+
+      messaging()
+        .getToken()
+        .then((token) => {
+          console.log(token);
+          //TOLONG KETIKA TOKEN DI SAVE KE DATABASE
+        })
+        .catch((error) => {
+          console.log("Failed to get token:", error);
+        });
+
+      // Check whether an initial notification is available
+      messaging()
+        .getInitialNotification()
+        .then(async (remoteMessage) => {
+          if (remoteMessage) {
+            console.log(
+              "Notification caused app to open from quit state:",
+              remoteMessage.notification
+            );
+          }
+        })
+        .catch((error) => {
+          console.log("Failed to get initial notification:", error);
+        });
+
+      // Assume a message-notification contains a "type" property in the data payload of the screen to open
+      messaging().onNotificationOpenedApp(async (remoteMessage) => {
+        console.log(
+          "Notification caused app to open from background state:",
+          remoteMessage.notification
+        );
+      });
+
+      // Register background handler
+      messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+        console.log("Message handled in the background!", remoteMessage);
+      });
+
+      const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+        Alert.alert(
+          "A new FCM message arrived!",
+          JSON.stringify(remoteMessage)
+        );
+      });
+
+      return unsubscribe;
+    };
+
+    getTokenAndHandleNotifications(); // Call the new function
+
+    // Empty dependency array to run the effect only once
     return async () => {};
   }, []);
 
