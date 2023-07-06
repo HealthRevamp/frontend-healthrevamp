@@ -94,7 +94,7 @@ export default function ChallengeScreen() {
               marginBottom: 20,
             }}
           >
-            Challenge
+            Challenges
           </Text>
           <View style={styles.container}>
             {activities?.map((el) => (

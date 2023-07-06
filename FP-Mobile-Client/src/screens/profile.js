@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { doRegister } from "../actions/action";
+import { doUpdate } from "../actions/action";
 import {
   selectData,
   selectLoading,
@@ -34,59 +34,32 @@ export default function Profile() {
   const dispatch = useDispatch();
   const dataUser = useSelector(selectDataUser);
 
-  // const handleEdit = async () => {
-  //   const move = () => {
-  //     navigate("formedit");
-  //   };
-  //   const AlertSuccess = () => {
-  //     Alert.alert("Success", "Edit successful!");
-  //   };
-  //   const AlertFailed = () => {
-  //     Alert.alert("Edit failed!", "Check your input");
-  //   };
-  //   dispatch(
-  //     doEdit(
-  //       username,
-  //       email,
-  //       password,
-  //       height,
-  //       width,
-  //       move,
-  //       AlertSuccess,
-  //       AlertFailed
-  //     )
-  //   );
-  // };
+  const handleEdit = async () => {
+    const move = () => {
+      navigate("formedit");
+    };
+    const AlertSuccess = () => {
+      Alert.alert("Success", "Edit successful!");
+    };
+    const AlertFailed = () => {
+      Alert.alert("Edit failed!", "Check your input");
+    };
+    dispatch(
+      doUpdate(
+        username,
+        email,
+        password,
+        height,
+        width,
+        move,
+        AlertSuccess,
+        AlertFailed
+      )
+    );
+  };
 
   return (
     <>
-      {/* {loading && (
-        <View
-          style={{
-            position: "absolute",
-            zIndex: 1,
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            backgroundColor: "black",
-            height: "100%",
-            opacity: 0.8,
-          }}
-        >
-          <ActivityIndicator size="large" />
-          <Text
-            style={{
-              textAlign: "center",
-              color: "#fff",
-              fontWeight: "bold",
-              fontSize: 20,
-            }}
-          >
-            Patience is part of health
-          </Text>
-        </View>
-      )} */}
       <ScrollView
         style={{ height: "100%", flex: 1, backgroundColor: "#1E87CE" }}
       >
@@ -101,145 +74,143 @@ export default function Profile() {
           <Text
             style={{
               marginTop: 30,
-              marginLeft: 20,
+              // marginLeft: 20,
               fontSize: 30,
               fontWeight: "bold",
               // letterSpacing: 0.25,
-              color: "#606060",
+              color: "#000",
+              textAlign: "center",
             }}
           >
             My Profile
           </Text>
-          <Text
-            style={{
-              marginLeft: 20,
-            }}
-          >
-            Please complate your profile
-          </Text>
-
-          <View style={{ marginLeft: 20, marginTop: 20 }}>
-            <Image
-              style={{ width: 100, height: 100, borderRadius: 10 }}
-              source={require("../../assets/challange.png")}
-            ></Image>
-          </View>
 
           <View
             style={{
-              marginLeft: 20,
+              // marginLeft: 20,
+              marginTop: 20,
+              width: "100%",
+              justifyContent: "center",
+              flexDirection: "row",
+            }}
+          >
+            <Image
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 50,
+                borderColor: "#1E87CE",
+                borderWidth: 2,
+                resizeMode: "contain",
+              }}
+              source={require("../../assets/goodview.png")}
+            ></Image>
+          </View>
+          <Text style={{fontSize: 24, textAlign: 'center', fontWeight: 'bold'}}>{dataUser?.username}</Text>
+          <View
+            style={{
               marginTop: 10,
               marginBottom: 20,
               flexDirection: "row",
               flexWrap: "wrap",
-              gap: 40
+              gap: 20,
+              paddingHorizontal: 20,
             }}
           >
-            <View style={{ marginLeft: 7, borderRadius: 10 }}>
-              <TouchableOpacity
-                onPress={() => {
-                  navigate("Update Profile");
-                }}
-                underlayColor="transparent"
-                activeOpacity={1}
+            <View style={{ flex: 1 }}>
+              <LinearGradient
+                colors={["#0C6EB1", "#22C49D"]}
+                start={[0, 0]}
+                end={[1, 0]}
+                style={styles.button}
               >
-                <Ionicons style={{textAlign: 'center'}} name="create-outline" size={40} color={"#606060"} />
-                <Text>Update Profile</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigate("Update Profile");
+                  }}
+                  underlayColor="transparent"
+                  activeOpacity={1}
+                  style={{ flexDirection: "row" }}
+                >
+                  <Ionicons
+                    style={{ textAlign: "center" }}
+                    name="create-outline"
+                    size={20}
+                    color={"#fff"}
+                  />
+                  <Text style={{ color: "#fff" }}>Update Profile</Text>
+                </TouchableOpacity>
+              </LinearGradient>
             </View>
-            <View style={{ marginLeft: 7 }}>
-              <TouchableOpacity
-                onPress={() => {
-                  navigate('Payment')
-                }}
-                underlayColor="transparent"
-                activeOpacity={1}
+            <View style={{ flex: 1 }}>
+              <LinearGradient
+                colors={["#0C6EB1", "#22C49D"]}
+                start={[0, 0]}
+                end={[1, 0]}
+                style={styles.button}
               >
-                <Ionicons style={{textAlign: 'center'}} name="card-outline" size={40} color={"#606060"} />
-                <Text>Payment</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigate("Payment");
+                  }}
+                  underlayColor="transparent"
+                  activeOpacity={1}
+                  style={{ flexDirection: "row", gap: 10 }}
+                >
+                  <Ionicons
+                    style={{ textAlign: "center" }}
+                    name="card-outline"
+                    size={20}
+                    color={"#fff"}
+                  />
+                  <Text style={{ color: "#fff" }}>Payment</Text>
+                </TouchableOpacity>
+              </LinearGradient>
             </View>
           </View>
 
           <View style={styles.containerForm}>
-            <View>
+            <View style={{flex: 1}}>
               <Text
                 style={{
                   marginLeft: 17,
                   fontSize: 16,
-                  color: "#606060",
+                  color: "#000",
                   marginTop: 12,
-                }}
-              >
-                Name
-              </Text>
-              <TextInput
-                placeholder={dataUser?.username}
-                // placeholder="edit your name"
-                value={username}
-                onChangeText={setUsername}
-                style={styles.input}
-                editable={false}
-              />
-            </View>
-            <View>
-              <Text
-                style={{
-                  marginLeft: 17,
-                  fontSize: 16,
-                  color: "#606060",
-                  marginTop: 12,
+                  textAlign: 'center'
                 }}
               >
                 Total Calorie
               </Text>
-              <TextInput
-                //   placeholder={dataUser?.totalCalorie}
-                placeholder={`${dataUser?.totalCalorie}`}
-                onChangeText={setEmail}
-                style={styles.input}
-                editable={false}
-              />
+              <Text style={styles.input}>{dataUser?.totalCalorie}</Text>
             </View>
-            <View>
+            <View style={{flex: 1}}>
               <Text
                 style={{
                   marginLeft: 17,
                   fontSize: 16,
-                  color: "#606060",
+                  color: "#000",
                   marginTop: 12,
+                  textAlign: 'center'
                 }}
               >
                 Height
               </Text>
-              <TextInput
-                placeholder="170"
-                // placeholder="type your height"
-                value={dataUser?.height}
-                onChangeText={setHeight}
-                style={styles.input}
-                editable={false}
-              />
+              <Text style={styles.input}>{dataUser?.height}</Text>
             </View>
-            <View>
+            <View style={{flex: 1}}>
               <Text
                 style={{
                   marginLeft: 17,
                   fontSize: 16,
-                  color: "#606060",
+                  color: "#000",
                   marginTop: 12,
+                  textAlign: 'center'
                 }}
               >
-                Width
+                Weight
               </Text>
-              <TextInput
-                placeholder="60"
-                // placeholder="type your width"
-                value={dataUser?.width}
-                onChangeText={setWidth}
-                style={styles.input}
-                editable={false}
-              />
+              <Text style={styles.input}>{dataUser?.weight}</Text>
             </View>
           </View>
         </View>
@@ -253,16 +224,15 @@ const styles = StyleSheet.create({
     padding: 3,
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 20
+    gap: 20,
   },
   input: {
-    height: 50,
     marginHorizontal: 12,
     paddingLeft: 10,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    borderColor: "#EEEEEE",
-    shadowColor: "#9B9B9B",
+    textAlign: 'center',
+    color: '#000'
   },
   button: {
     alignItems: "center",

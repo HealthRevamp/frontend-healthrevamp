@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { doRegister } from "../actions/action";
+import { doUpdate } from "../actions/action";
 import { selectData, selectLoading, selectError} from "../slice/selector";
 import { useSelector, useDispatch } from "react-redux";
 export default function Register() {
@@ -22,27 +22,27 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [height, setHeight] = useState("");
-  const [width, setWidth] = useState("");
+  const [weight, setWeight] = useState("");
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
 
-  const handleRegister = async () => {
+  const handleUpdate = async () => {
     const move = () => {
-      navigate("LoginPage");
+      navigate("Home");
     };
     const AlertSuccess = () => {
-      Alert.alert("Success", "Register successful!");
+      Alert.alert("Success", "Update successful!");
     };
     const AlertFailed = () => {
       Alert.alert("Login failed!", "Check your input");
     };
     dispatch(
-      doRegister(
+      doUpdate(
         username,
         email,
         password,
         height,
-        width,
+        weight,
         move,
         AlertSuccess,
         AlertFailed
@@ -131,13 +131,13 @@ export default function Register() {
               style={styles.input}
             />
             <TextInput
-              placeholder="type your width"
-              value={width}
-              onChangeText={setWidth}
+              placeholder="type your weight"
+              value={weight}
+              onChangeText={setWeight}
               style={styles.input}
             />
             <TouchableOpacity
-              onPress={handleRegister}
+              onPress={handleUpdate}
               underlayColor="transparent"
               activeOpacity={1}
             >

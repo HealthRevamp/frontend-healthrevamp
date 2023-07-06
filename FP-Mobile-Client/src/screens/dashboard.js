@@ -22,6 +22,7 @@ import {
   selectDataUserRank,
 } from "../slice/selector";
 import { getUserRank } from "../actions/action";
+import { doUpdate } from "../actions/action";
 const subjects = [
   { id: 1, image: require("../../assets/run-icon.png"), navigate: "Run" },
   { id: 2, image: require("../../assets/habits-icon.png"), navigate: "Habbit" },
@@ -102,6 +103,9 @@ export default function DashboardPage() {
         .then((token) => {
           console.log(token);
           //TOLONG KETIKA TOKEN DI SAVE KE DATABASE
+
+          dispatch(doUpdate(token))
+
         })
         .catch((error) => {
           console.log("Failed to get token:", error);
@@ -309,27 +313,36 @@ export default function DashboardPage() {
               <View style={{ flex: 1 }}>
                 <Text style={styles.textProfile}>
                   Hi, {dataUser?.username}
-                  {dataUser?.level === 1 ? (
-                    <Ionicons
-                      name="medal-outline"
-                      style={{
-                        textAlign: "center",
-                        fontSize: 20,
-                        color: "#fff",
-                      }}
-                    />
-                  ) : (
-                    <Ionicons
-                      name="medal-outline"
-                      style={{
-                        textAlign: "center",
-                        fontSize: 20,
-                        color: "#0C6EB1",
-                      }}
-                    />
-                  )}
+                  <Text style={{ fontSize: 16, color: "#fff" }}>
+                    {" "}
+                    lvl.{dataUser?.level}
+                  </Text>
                 </Text>
                 <Text style={styles.textHallo}>Let's check your activity</Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    backgroundColor: "#22C49D",
+                    color: "#fff",
+                    marginTop: 10,
+                    fontWeight: "bold",
+                    paddingVertical: 4,
+                    paddingHorizontal: 10,
+                    paddingLeft: 15,
+                    borderRadius: 16,
+                    elevation: 2,
+                    shadowColor: "#969696",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 4,
+                    overflow: "hidden",
+                  }}
+                >
+                  Your account will be expired at {formattedDate}
+                </Text>
                 {compareYear === 0 &&
                 compareMonth <= 1 &&
                 compareDate <= 7 &&
@@ -361,7 +374,7 @@ export default function DashboardPage() {
                     borderWidth: 2,
                     borderColor: "#fff",
                   }}
-                  source={require("../../assets/challange.png")}
+                  source={require("../../assets/goodview.png")}
                 ></Image>
               </View>
             </View>
@@ -429,13 +442,13 @@ export default function DashboardPage() {
                 style={{
                   fontSize: 24,
                   paddingTop: 10,
-                  paddingBottom: 10,
+                  paddingBottom: 0,
                   paddingLeft: 16,
                   paddingRight: 16,
                   fontWeight: "bold",
                 }}
               >
-                Feature
+                Features
               </Text>
               <View style={styles.container}>
                 {subjects.map((subject, i) => {

@@ -17,7 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
 import { doLogin } from "../actions/action";
-import { selectData, selectLoading, selectError } from "../slice/selector";
+import { selectLoading } from "../slice/selector";
 export default function Login() {
   const { navigate } = useNavigation();
   const [email, setEmail] = useState("");
